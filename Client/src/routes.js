@@ -43,7 +43,7 @@ const User = React.lazy(() => import('./views/users/User'));
 /*const Utilisateurs = React.lazy(() => import('./views/base/utilisateurs/utilisateurs'));*/
 const CreationUtilisateur = React.lazy(() => import('./views/utilisateurs/creerutilisateur/Creerutilisateur'));
 const Utilisateurs = React.lazy(() => import('./views/utilisateurs/listeutilisateurs/listeutilisateurs'));
-
+const Personnels = React.lazy(() => import('./views/app/personnels/Personnels'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -89,7 +89,8 @@ const routes = [
   //route personnalisé
   /*{ path: '/utilisateurs', name: 'Utilisateurs', component: Utilisateurs, exact: true },*/
   { path: '/utilisateurs/creerutilisateur', name: 'Créer un utilisateur', component: CreationUtilisateur },
-  { path: '/utilisateurs/listeutilisateurs', name: 'Liste des utilisateurs', component: Utilisateurs }
+  { path: '/utilisateurs/listeutilisateurs', name: 'Liste des utilisateurs', component: Utilisateurs },
+  { path: '/app/personnels', name: 'Liste des personnels', component: Personnels }
 ];
 
 export default routes;

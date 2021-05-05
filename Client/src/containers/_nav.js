@@ -44,8 +44,8 @@ const _nav =  [
     icon: 'cil-task',
   },{
     _tag: 'CSidebarNavItem',
-    name: 'Paiement',
-    to: '/App/Paiement',
+    name: 'Facturations',
+    to: '/App/Facturations',
     icon: 'cil-credit-card',
   },{
     _tag: 'CSidebarNavItem',
