@@ -1,5 +1,8 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faInfoCircle,faHorseHead } from '@fortawesome/free-solid-svg-icons'
+
 
 const _nav =  [
   {
@@ -21,34 +24,40 @@ const _nav =  [
     _tag: 'CSidebarNavItem',
     name: 'Personnels',
     to: '/App/Personnels',
-    icon: 'cil-drop',
+    icon: 'cil-user',
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Clients',
     to: '/App/Clients',
-    icon: 'cil-pencil',
+    icon: 'cil-people',
   },
   {
     _tag: 'CSidebarNavItem',
     name: 'Séance',
     to: '/App/Seance',
-    icon: 'cil-pencil',
+    icon: 'cil-list',
   },{
     _tag: 'CSidebarNavItem',
     name: 'Tache',
     to: '/App/Tache',
-    icon: 'cil-pencil',
+    icon: 'cil-task',
   },{
     _tag: 'CSidebarNavItem',
     name: 'Paiement',
     to: '/App/Paiement',
-    icon: 'cil-pencil',
+    icon: 'cil-credit-card',
   },{
     _tag: 'CSidebarNavItem',
     name: 'Chevaux',
     to: '/App/Chevaux',
-    icon: 'cil-pencil',
+    icon: <FontAwesomeIcon icon={faHorseHead} style={{marginRight:"22px"}}/>,
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Réclamations',
+    to: '/App/Reclamations',
+    icon: 'cil-comment-square',
   },
   ////////////////////////////////
   {
