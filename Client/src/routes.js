@@ -44,7 +44,8 @@ const User = React.lazy(() => import('./views/users/User'));
 const CreationUtilisateur = React.lazy(() => import('./views/utilisateurs/creerutilisateur/Creerutilisateur'));
 const Utilisateurs = React.lazy(() => import('./views/utilisateurs/listeutilisateurs/listeutilisateurs'));
 const Personnels = React.lazy(() => import('./views/app/personnels/Personnels'));
-
+const Clients = React.lazy(() => import('./views/app/clients/Clients'));
+const Chevaux = React.lazy(() => import('./views/app/chevaux/Chevaux'));
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
@@ -90,7 +91,9 @@ const routes = [
   /*{ path: '/utilisateurs', name: 'Utilisateurs', component: Utilisateurs, exact: true },*/
   { path: '/utilisateurs/creerutilisateur', name: 'Créer un utilisateur', component: CreationUtilisateur },
   { path: '/utilisateurs/listeutilisateurs', name: 'Liste des utilisateurs', component: Utilisateurs },
-  { path: '/app/personnels', name: 'Liste des personnels', component: Personnels }
+  { path: '/app/personnels', name: 'Liste des personnels', component: Personnels },
+  { path: '/app/clients', name: 'Liste des clients', component: Clients },
+  { path: '/app/chevaux', name: 'Liste des chevaux', component: Chevaux }
 ];
 
 export default routes;

@@ -1,8 +1,8 @@
 const employeData = [
-    {id: 0, nom: 'ARCHANE', prenom: 'Zakaria',email:'zakariaarchane06@gmail.com', DateNaissance: '16/03/2000', fonction: 'Ingénieur',departement:'Info'},
-    {id: 1, nom: 'fas', prenom: 'Pas',email:'fasspass6@gmail.com', DateNaissance: '16/03/2000', fonction: 'Ingénieur',departement:'Génie civil'},
-    {id: 2, nom: 'Mox', prenom: 'Fox',email:'focxne06@gmail.com', DateNaissance: '16/03/2000', fonction: 'Moniteur',departement:'Ecurie'},
-    {id: 3, nom: 'ARCHANE', prenom: 'Zakaria',email:'zakariaarchane06@gmail.com', DateNaissance: '16/03/2000', fonction: 'Ingénieur',departement:'Info'},
+    {id: 0, nom: 'ARCHANE', prenom: 'Zakaria',email:'zakariaarchane06@gmail.com', matricule: 'AE28171', fonction: 'Ingénieur',departement:'Info'},
+    {id: 1, nom: 'fas', prenom: 'Pas',email:'fasspass6@gmail.com', matricule: 'FF89E33', fonction: 'Ingénieur',departement:'Génie civil'},
+    {id: 2, nom: 'Mox', prenom: 'Fox',email:'focxne06@gmail.com', matricule: 'RE80292', fonction: 'Moniteur',departement:'Ecurie'},
+    {id: 3, nom: 'ARCHANE', prenom: 'Zakaria',email:'zakariaarchane06@gmail.com', matricule: 'AA998129', fonction: 'Ingénieur',departement:'Info'},
     {id: 4, name: 'Derick Maximinus', registered: '2018/03/01', role: 'Member', status: 'Pending'},
     {id: 5, name: 'Friderik Dávid', registered: '2018/01/21', role: 'Staff', status: 'Active'},
     {id: 6, name: 'Yiorgos Avraamu', registered: '2018/01/01', role: 'Member', status: 'Active'},
