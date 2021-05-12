@@ -18,9 +18,9 @@ const loading = (
 const TheContent = () => {
   return (
     <main className="c-main">
-      <CContainer fluid>
+      <CContainer fluid >
         <Suspense fallback={loading}>
-          <Switch>
+          <Switch >
             {routes.map((route, idx) => {
               return route.component && (
                 <Route
@@ -29,7 +29,7 @@ const TheContent = () => {
                   exact={route.exact}
                   name={route.name}
                   render={props => (
-                    <CFade>
+                    <CFade >
                       <route.component {...props} />
                     </CFade>
                   )} />

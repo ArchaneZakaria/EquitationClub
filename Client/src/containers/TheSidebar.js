@@ -27,11 +27,11 @@ const TheSidebar = () => {
     <CSidebar
       show={show}
       onShowChange={(val) => dispatch({type: 'set', sidebarShow: val })}
-      colorScheme='dark'
+      style={{backgroundColor:"#123c69"}}
     >
       <CSidebarBrand className="d-md-down-none" to="/">
       <FontAwesomeIcon icon={faHorseHead} size="3x" />
-        EquiClub
+         EquiClub
       </CSidebarBrand>
       <CSidebarNav>
 

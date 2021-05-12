@@ -38,7 +38,7 @@ const TheHeader = () => {
   }
 
   return (
-    <CHeader withSubheader>
+    <CHeader withSubheader style={{backgroundColor:"#c5c6c7"}}>
       <CToggler
         inHeader
         className="ml-md-3 d-lg-none"
@@ -50,18 +50,18 @@ const TheHeader = () => {
         onClick={toggleSidebar}
       />
       <CHeaderBrand className="mx-auto d-lg-none" to="/">
-        <CIcon name="logo" height="48" alt="Logo"/>
+      {/*<CIcon name="logo" height="48" alt="Logo"/>*/}
       </CHeaderBrand>
 
-      <CHeaderNav className="d-md-down-none mr-auto">
+      <CHeaderNav className="d-md-down-none mr-auto" >
         <CHeaderNavItem className="px-3" >
           <CHeaderNavLink to="/dashboard">Dashboard</CHeaderNavLink>
         </CHeaderNavItem>
         <CHeaderNavItem  className="px-3">
-          <CHeaderNavLink to="/users">Users</CHeaderNavLink>
+          <CHeaderNavLink to="/users">Séances</CHeaderNavLink>
         </CHeaderNavItem>
         <CHeaderNavItem className="px-3">
-          <CHeaderNavLink>Settings</CHeaderNavLink>
+          <CHeaderNavLink>Taches</CHeaderNavLink>
         </CHeaderNavItem>
       </CHeaderNav>
 
@@ -69,10 +69,10 @@ const TheHeader = () => {
         <TheHeaderDropdownNotif/>
         <TheHeaderDropdownTasks/>
         <TheHeaderDropdownMssg/>
-        <TheHeaderDropdown/>
+      {/*  <TheHeaderDropdown/> */}
       </CHeaderNav>
 
-      <CSubheader className="px-3 justify-content-between">
+      <CSubheader className="px-3 justify-content-between" style={{backgroundColor:"#1f2833"}}>
         <CBreadcrumbRouter 
           className="border-0 c-subheader-nav m-0 px-0 px-md-3" 
           routes={routes} 
@@ -89,7 +89,7 @@ const TheHeader = () => {
               <CIcon name="cil-graph" alt="Dashboard" />&nbsp;Dashboard
             </CLink>
             <CLink className="c-subheader-nav-link" href="#">
-              <CIcon name="cil-settings" alt="Settings" />&nbsp;Settings
+              <CIcon name="cil-settings" alt="Settings" />&nbsp;Paramétres
             </CLink>
           </div>
       </CSubheader>

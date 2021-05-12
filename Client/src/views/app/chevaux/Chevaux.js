@@ -29,7 +29,7 @@ import chevauxData from "../chevaux/ChevauxData";
 
 import ReactDOM from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faHistory, faEllipsisH,faEdit,faInfoCircle,faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 const getBadge = (status) => {
   switch (status) {
@@ -51,7 +51,7 @@ const fields = [
   "DateAcces",
   "Paddock",
   "Race",
-  "Etat De santé",
+  "EtatDeSante",
   "Options",
 ];
 
@@ -63,24 +63,15 @@ const ModalDelete = (props) => {
   const [modal, setModal] = React.useState(props.showing);
   return (
     <React.Fragment>
-      <FontAwesomeIcon
-        icon={faTrashAlt}
-        onClick={() => {
-          setModal(!modal);
-        }}
-      />
+      <CButton size="sm" shape="pill" color="danger" className=""  title="Supprimer" style={{position: "relative",float:"left"}}  onClick={()=>{setModal(!modal)}}>
+                    <FontAwesomeIcon  size="sm" icon={faTrashAlt}/>
+                    </CButton>
       <CModal show={modal} onClose={setModal}>
         <CModalHeader closeButton>
-          <CModalTitle>Modal title</CModalTitle>
+          <CModalTitle>Confirmation</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Lorem ipsum dolor sit amet, consectetur adipisiRaceg elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
+        Etes-vous sur vous voulez supprimer ?
         </CModalBody>
         <CModalFooter>
           <CButton color="primary" onClick={deleting}>
@@ -99,7 +90,9 @@ const ModalInfo = (props) => {
   const [modal, setModal] = React.useState(props.showing);
   return (
     <React.Fragment>
-      <FontAwesomeIcon icon={faInfoCircle} onClick={() => setModal(!modal)} />
+      <CButton size="sm" shape="pill" color="secondary" className=""  title="Supprimer" style={{position: "relative",float:"left"}}  onClick={()=>{setModal(!modal)}}>
+        <FontAwesomeIcon  size="sm" icon={faInfoCircle}/>
+        </CButton>
       <CModal show={modal} onClose={setModal}>
         <CModalHeader closeButton>
           <CModalTitle>Modal title</CModalTitle>
@@ -303,7 +296,7 @@ const Chevaux = () => {
       <CRow>
         <CCol>
           <CCard>
-            <CCardHeader>Liste des personnels</CCardHeader>
+            <CCardHeader>Liste des chevaux</CCardHeader>
             <CCardBody>
               <ModalNewPersonnel showing={false} />
               <CDataTable
@@ -321,12 +314,7 @@ const Chevaux = () => {
                   Options: (item) => (
                     <td>
                       <ModalInfo showing={false} nom={item.nom} />
-                      <ModalDelete
-                        showing={false}
-                        nom={item.nom}
-                        onDelete={handleDelete}
-                        id={item.id}
-                      />
+                      <ModalDelete showing={false} nom={item.nom} onDelete={handleDelete} id={item.id} />
                     </td>
                   ),
                 }}

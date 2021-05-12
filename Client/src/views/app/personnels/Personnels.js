@@ -38,14 +38,13 @@ import { useForm } from "react-hook-form";
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import CIcon from '@coreui/icons-react'
-import { DocsLink } from 'src/reusable'
 
 import employeData from '../personnels/EmployeData'
 import historyData from '../personnels/HistoryData'
+import detailsHistory from '../personnels/detailsHistory'
 
-import ReactDOM from 'react-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHistory, faEllipsisH,faEdit,faInfoCircle,faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown,faChevronUp,faHistory, faEllipsisH,faEdit,faInfoCircle,faTrashAlt, faCircle } from '@fortawesome/free-solid-svg-icons'
 
 
 //Les champs du datatable historique
@@ -76,6 +75,17 @@ const fieldsEmploye=[
     
   ]
 
+
+  //Les champs du datatable employe
+
+const fieldsMoreInfo=[
+    { key: 'Type' },
+    { key: 'Séance' },
+    { key: 'Client' },
+    { key: 'Paddock' },
+    { key: 'Cheval' },
+    
+  ]
   //L'option qui permet de faire une tabulation
 
 
@@ -83,7 +93,7 @@ const fieldsEmploye=[
 //L'option qui permet de consulter l'historique de l'employé
 const ModalHistorique=(props)=>{
 
-
+    const [data,setData]=useState(detailsHistory)
     const [modal, setModal] =React.useState(props.showing)
     const [details, setDetails] = useState([])
 
@@ -146,14 +156,8 @@ const ModalHistorique=(props)=>{
                                           (item, index)=>{
                                             return (
                                               <td className="py-2">
-                                                <CButton
-                                                  color="primary"
-                                                  variant="outline"
-                                                  shape="square"
-                                                  size="sm"
-                                                  onClick={()=>{toggleDetails(index)}}
-                                                >
-                                                  {details.includes(index) ? 'Hide' : 'Show'}
+                                                  <CButton size="sm" shape="pill" color="secondary" className=""  title="Plus d'informations" style={{position: "relative",float:"left"}} onClick={()=>{toggleDetails(index)}}>
+                                                {details.includes(index) ? <FontAwesomeIcon  size="sm" icon={faChevronUp}/> : <FontAwesomeIcon  size="sm" icon={faChevronDown}/>}
                                                 </CButton>
                                               </td>
                                               )
@@ -163,16 +167,17 @@ const ModalHistorique=(props)=>{
                                               return (
                                               <CCollapse show={details.includes(index)}>
                                                 <CCardBody>
-                                                  <h4>
-                                                   
-                                                  </h4>
-                                                  <p className="text-muted">User since: </p>
-                                                  <CButton size="sm" color="info">
-                                                    User Settings
-                                                  </CButton>
-                                                  <CButton size="sm" color="danger" className="ml-1">
-                                                    Delete
-                                                  </CButton>
+                                                  <CDataTable 
+                                                        clickableRows
+                                                        items={data}
+                                                        fields={fieldsMoreInfo}
+                                                        hover
+                                                        striped
+                                                        bordered
+                                                        size="sm"
+                                                        itemsPerPage={1}
+                                                        pagination
+                                                    />
                                                 </CCardBody>
                                               </CCollapse>
                                             )
@@ -399,11 +404,10 @@ const ModalEdit=(props)=>{
               </CForm>
                         </CModalBody>
                         <CModalFooter>
-                            <CButton color="primary">Ajouter</CButton>{' '}
                             <CButton 
                             color="secondary" 
                             onClick={() => setLarge(false)}
-                            >Cancel</CButton>
+                            >Fermer</CButton>
                         </CModalFooter>
             </CModal>
             </React.Fragment>
@@ -414,39 +418,51 @@ const ModalEdit=(props)=>{
 
 //L'option de supprimer un employé 
 const ModalDelete=(props)=>{
-
+   const[show,setShow]=React.useState(true)
     const deleting=()=>{
         props.onDelete(props.id)
         setModal(!modal)
     }
     const [modal, setModal] =React.useState(props.showing)
-    return(
-            <React.Fragment>
-                <CButton size="sm" shape="pill" color="danger" className=""  title="Supprimer" style={{position: "relative",float:"left"}}  onClick={()=>{setModal(!modal)}}>
-                    <FontAwesomeIcon  size="sm" icon={faTrashAlt}/>
-                    </CButton>
+    if(show){
+      return(
+        <React.Fragment>
+            <CButton size="sm" shape="pill" color="danger" className=""  title="Supprimer" style={{position: "relative",float:"left"}}  onClick={()=>{setModal(!modal)}}>
+                <FontAwesomeIcon  size="sm" icon={faTrashAlt}/>
+                </CButton>
+                
+                 <CModal 
+                    show={modal} 
+                    onClose={setModal}
+                    >
+                    <CModalHeader closeButton>
+                        <CModalTitle>Confirmation</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+                        Etes-vous sur vous voulez supprimer ?
+                    </CModalBody>
+                    <CModalFooter>
+                        <CButton color="primary" onClick={deleting}>Oui</CButton>{' '}
+                        <CButton 
+                        color="secondary" 
+                        onClick={() => setModal(false)}
+                        >Annuler</CButton>
+                    </CModalFooter>
+            </CModal>
+        </React.Fragment>
+    
+    
                     
-                     <CModal 
-                        show={modal} 
-                        onClose={setModal}
-                        >
-                        <CModalHeader closeButton>
-                            <CModalTitle>Confirmation</CModalTitle>
-                        </CModalHeader>
-                        <CModalBody>
-                            Etes-vous sur vous voulez supprimer ?
-                        </CModalBody>
-                        <CModalFooter>
-                            <CButton color="primary" onClick={deleting}>Oui</CButton>{' '}
-                            <CButton 
-                            color="secondary" 
-                            onClick={() => setModal(false)}
-                            >Annuler</CButton>
-                        </CModalFooter>
-                </CModal>
-            </React.Fragment>
+    )}else{
+      return(
+        <React.Fragment>
+            
+        </React.Fragment>
+    
+    
                     
     )
+    }
 
 }
 
@@ -684,11 +700,11 @@ const ModalNewPersonnel=(props)=>{
               </CForm>
                         </CModalBody>
                         <CModalFooter>
-                            <CButton color="primary">Ajouter</CButton>{' '}
+                            {' '}
                             <CButton 
                             color="secondary" 
                             onClick={() => setLarge(false)}
-                            >Cancel</CButton>
+                            >Fermer</CButton>
                         </CModalFooter>
             </CModal>
             </React.Fragment>
