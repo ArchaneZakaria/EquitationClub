@@ -730,7 +730,7 @@ const ModalAssurance = (props) => {
         <CButton
           size="sm"
           color="secondary"
-          shape="box"
+          shape="pill"
           className=""
           title="Ajouter assurance"
           style={{ position: "relative", float: "left" }}
@@ -884,6 +884,7 @@ const ModalInscription = (props) => {
         <CButton
           size="sm"
           color="secondary"
+          shape="pill"
           className=""
           title="Ajouter Inscription"
           style={{ position: "relative", float: "left" }}
@@ -997,7 +998,7 @@ const Clients = () => {
 
   return (
     <>
-      <CRow>
+      <CRow >
         <CCol>
           <CCard>
             <CCardHeader>Liste des clients</CCardHeader>
@@ -1025,7 +1026,7 @@ const Clients = () => {
                         onDelete={handleDelete}
                         id={item.id}
                       />
-                      <div class="dropdown">
+                      <div class="dropdown" >
                         <CButton shape='pill' color = 'secondary' size='sm'>
                         <FontAwesomeIcon size="sm" icon={faPlusSquare} />
                         </CButton>
