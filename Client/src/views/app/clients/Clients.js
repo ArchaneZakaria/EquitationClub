@@ -24,7 +24,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import CIcon from "@coreui/icons-react";
 import { DocsLink } from "src/reusable";
-
 import ClientData from "../clients/ClientData";
 
 import ReactDOM from "react-dom";
@@ -37,6 +36,10 @@ import {
   faTrashAlt,
   faBookMedical,
   faSignInAlt,
+  faEllipsisV,
+  faCalendar,
+  faPlusSquareSquare,
+  faPlusSquare
 } from "@fortawesome/free-solid-svg-icons";
 import clientData from "../clients/ClientData";
 
@@ -127,7 +130,7 @@ const ModalInfo = (props) => {
       </CButton>
       <CModal show={modal} onClose={setModal}>
         <CModalHeader closeButton>
-          <CModalTitle>Informations générales</CModalTitle>
+          <CModalTitle >Informations générales</CModalTitle>
         </CModalHeader>
         <CModalBody>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
@@ -726,8 +729,8 @@ const ModalAssurance = (props) => {
       <React.Fragment>
         <CButton
           size="sm"
-          shape="pill"
           color="secondary"
+          shape="box"
           className=""
           title="Ajouter assurance"
           style={{ position: "relative", float: "left" }}
@@ -880,7 +883,6 @@ const ModalInscription = (props) => {
       <React.Fragment>
         <CButton
           size="sm"
-          shape="pill"
           color="secondary"
           className=""
           title="Ajouter Inscription"
@@ -889,7 +891,7 @@ const ModalInscription = (props) => {
         >
           <FontAwesomeIcon size="sm" icon={faSignInAlt} />
         </CButton>
-        <CModal show={large} onClose={setLarge} size="lg">
+        <CModal show={large} onClose={setLarge} className="modal">
           <CModalHeader closeButton>
             <CModalTitle>
               Ajouter Inscription: {props.client.nom} {props.client.prenom}
@@ -986,7 +988,6 @@ const ModalInscription = (props) => {
     );
   }
 };
-
 const Clients = () => {
   const [data, setData] = useState(clientData);
   const handleDelete = (itemId) => {
@@ -1016,16 +1017,27 @@ const Clients = () => {
                 scopedSlots={{
                   options: (item) => (
                     <td>
-                      <ModalInfo showing={false} nom={item.nom} />
-                      <ModalEdit showing={false} client={item} />
-                      <ModalAssurance showing={false} client={item} />
-                      <ModalInscription showing={false} client={item} />
+                      <ModalInfo />
+                      <ModalEdit client={item} />
                       <ModalDelete
                         showing={false}
                         nom={item.nom}
                         onDelete={handleDelete}
                         id={item.id}
                       />
+                      <div class="dropdown">
+                        <CButton shape='pill' color = 'secondary' size='sm'>
+                        <FontAwesomeIcon size="sm" icon={faPlusSquare} />
+                        </CButton>
+                        <div class="dropdown-content">
+                          <a>
+                            <ModalInscription  client={item} />
+                          </a>
+                          <a>
+                            <ModalAssurance client={item} />
+                          </a>
+                        </div>
+                      </div>
                     </td>
                   ),
                 }}
