@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   CButton,
   CBadge,
@@ -44,7 +44,6 @@ import {
   faPlusSquare
 } from "@fortawesome/free-solid-svg-icons";
 import clientData from "../clients/ClientData";
-
 const getBadge = (status) => {
   switch (status) {
     case "Active":
@@ -68,10 +67,9 @@ const fields = [
   { key: 'options', _style: { width: '22%'} },
 ];
 const fieldsInfo = [
-  "NomComplet",
-  "CIN",
-  "NombreHeures",
-  "NombreChevaux",
+  "datePremiereInscription",
+  "nombreSeances",
+  "nombrePensions",
 ];
 
 const ModalDelete = (props) => {
@@ -123,7 +121,15 @@ const ModalDelete = (props) => {
 
 const ModalInfo = (props) => {
   const [modal, setModal] = React.useState(props.showing);
-  const [data, setData] = useState(infoClient);
+  const data=[{
+    "datePremiereInscription":props.client.datePremiereInscription,
+    "nombreSeances": props.client.nombreSeances,
+    "nombrePensions": props.client.nombrePensions,
+  }]
+  const [datePremiereInscription,setdatePremiereInscription]=React.useState(props.client.datePremiereInscription)
+  const [nombreSeances,setnombreSeances]=React.useState(props.client.nombreSeances)
+  const [nombrePensions,setnombrePensions]=React.useState(props.client.nombrePensions)
+  const table =["datePremiereInscription","nombreSeances","nombrePensions"]
   return (
     <React.Fragment>
       <CButton
@@ -145,22 +151,23 @@ const ModalInfo = (props) => {
         <CRow>
         <CCol>
           <CCard>
-            <CCardHeader>
+            <CCardHeader onClick={() => alert(JSON.stringify(data))} >
               Information Générales :
+
             </CCardHeader>
             <CCardBody>
-            <CDataTable 
+            <CDataTable
                 tableFilter
                 clickableRows
-              items={data}
-              fields={fieldsInfo}
-              hover
-              striped
-              bordered
-              size="sm"
-              itemsPerPage={10}
-              pagination
-            />
+                items={data}
+                fields={fieldsInfo}
+                hover
+                striped
+                bordered
+                size="sm"
+                itemsPerPage={10}
+                pagination
+              />
             </CCardBody>
           </CCard>
         </CCol>
@@ -1016,6 +1023,8 @@ const ModalInscription = (props) => {
 };
 const Clients = () => {
   const [data, setData] = useState(clientData);
+  const [dataInfo, setDataInfo] = useState(infoClient);
+
   const handleDelete = (itemId) => {
     const items = data.filter((item) => item.id !== itemId);
     setData(items);
@@ -1043,7 +1052,8 @@ const Clients = () => {
                 scopedSlots={{
                   options: (item) => (
                     <td>
-                      <ModalInfo />
+
+                      <ModalInfo client={item} />
                       <ModalEdit client={item} showing={false}/>
                       <ModalAssurance client ={item} showing={false}/>
                       <ModalInscription client ={item} showing={false}/>
