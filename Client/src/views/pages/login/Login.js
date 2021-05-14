@@ -26,15 +26,15 @@ const Login = () => {
               <CCard className="p-4">
                 <CCardBody>
                   <CForm>
-                    <h1>Login</h1>
-                    <p className="text-muted">Sign In to your account</p>
+                    <h1>Se connecter</h1>
+                    <p className="text-muted">Connectez-vous à votre compte</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupPrepend>
                         <CInputGroupText>
                           <CIcon name="cil-user" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="text" placeholder="Username" autoComplete="username" />
+                      <CInput type="text" placeholder="Email" autoComplete="username" />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupPrepend>
@@ -42,14 +42,14 @@ const Login = () => {
                           <CIcon name="cil-lock-locked" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="password" placeholder="Password" autoComplete="current-password" />
+                      <CInput type="password" placeholder="Mot de passe" autoComplete="current-password" />
                     </CInputGroup>
                     <CRow>
                       <CCol xs="6">
-                        <CButton color="primary" className="px-4">Login</CButton>
+                        <CButton color="primary" className="px-4">Se connecter</CButton>
                       </CCol>
                       <CCol xs="6" className="text-right">
-                        <CButton color="link" className="px-0">Forgot password?</CButton>
+                        <CButton color="link" className="px-0">Mot de passe oublié?</CButton>
                       </CCol>
                     </CRow>
                   </CForm>
@@ -58,7 +58,7 @@ const Login = () => {
               <CCard className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
                 <CCardBody className="text-center">
                   <div>
-                    <h2>Sign up</h2>
+                    <h2>Club d'équitation AZER </h2>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
                       labore et dolore magna aliqua.</p>
                     <Link to="/register">

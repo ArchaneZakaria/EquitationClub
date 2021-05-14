@@ -1,4 +1,4 @@
-import React, { Fragment, useState }  from 'react'
+import React, { Fragment, useState ,useEffect}  from 'react'
 import {
     CButton,
   CBadge,
@@ -225,6 +225,7 @@ const ModalHistorique=(props)=>{
 //L'option qui permet de modifier un employé
 
 const ModalEdit=(props)=>{
+  
     const [nom,setNom]=React.useState(props.employe.nom)
     const [prenom,setPrenom]=React.useState(props.employe.prenom)
     const [email,setEmail]=React.useState(props.employe.email)
@@ -232,7 +233,12 @@ const ModalEdit=(props)=>{
     const [tele,setTele]=React.useState('')
     const [adresse,setAdresse]=React.useState('')
     const [dateNaissance,setDateNaissance]=React.useState('')
-
+    const [defaults,setDefaults]=React.useState({
+      nom:props.employe.nom,
+      prenom:props.employe.prenom,
+      email:props.employe.email,
+  })
+    
     const schema=yup.object().shape({
         nom:yup.string().trim().required('Le nom est obligatoire'),
         prenom:yup.string().trim().required('Le prenom est obligatoire'),
@@ -244,13 +250,20 @@ const ModalEdit=(props)=>{
         departement:yup.string().required('Le département est obligatoire'),
         adresse:yup.string().required('L adresse est obligatoire')
       });
-    const defaults={
-        nom:props.employe.nom,
-        prenom:props.employe.prenom,
-        email:props.employe.email,
-    }
-      const { register, handleSubmit , errors,formState} = useForm({resolver:yupResolver(schema),defaultValues:defaults});
-
+      if(props.employe.nom!=nom){
+          setNom(props.employe.nom)
+          setPrenom(props.employe.prenom)
+          setEmail(props.employe.email)
+      }
+      React.useEffect(() => {
+        setValue("nom" , nom)
+        setValue("prenom" , prenom)
+        setValue("email" , email)
+      });
+     
+    
+      const { register, handleSubmit , errors,formState,setValue} = useForm({resolver:yupResolver(schema)});
+        
         const [large, setLarge] = useState(props.showing)
 
         const errorMessage = error => {
@@ -279,7 +292,7 @@ const ModalEdit=(props)=>{
                         size="lg"
                         >
                         <CModalHeader closeButton>
-                            <CModalTitle>Modifier l'employé :{props.employe.nom} {props.employe.prenom}</CModalTitle>
+                            <CModalTitle>Modifier l'employé :{nom} {props.employe.prenom}</CModalTitle>
                         </CModalHeader>
                         <CModalBody>
                         <CForm action="#" method="post" encType="multipart/form-data" className="form-horizontal" onSubmit={handleSubmit(onSubmit)}>
@@ -290,7 +303,7 @@ const ModalEdit=(props)=>{
                     <CLabel htmlFor="nom-input">Nom</CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
-                  <input className="col-md-12" type="text" placeholder="Veuillez saisir le nom" {...register("nom")}  onChange={(e)=>{setNom(e.target.value)}}/>
+                  <input className="col-md-12" type="text" placeholder="Veuillez saisir le nom" {...register("nom")} />
                   {formState.errors.nom &&errorMessage(formState.errors.nom.message)}
                   </CCol>
                 </CFormGroup>
@@ -299,7 +312,7 @@ const ModalEdit=(props)=>{
                     <CLabel htmlFor="prenom-input">Prenom</CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
-                  <input className="col-md-12" type="text" placeholder="Veuillez saisir le prenom" {...register("prenom")}  onChange={(e)=>{setPrenom(e.target.value)}}/>
+                  <input className="col-md-12" type="text" placeholder="Veuillez saisir le prenom" {...register("prenom")}  />
                   {formState.errors.prenom  &&errorMessage(formState.errors.prenom.message)}
                   </CCol>
                 </CFormGroup>
@@ -308,7 +321,7 @@ const ModalEdit=(props)=>{
                     <CLabel htmlFor="email-input">Adresse email</CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
-                  <input className="col-md-12" type="text" placeholder="Veuillez saisir l'email" {...register("email")} onChange={(e)=>{setEmail(e.target.value)}}/>
+                  <input className="col-md-12" type="text" placeholder="Veuillez saisir l'email" {...register("email")} />
                   {formState.errors.email &&errorMessage(formState.errors.email.message)}
                   </CCol>
                 </CFormGroup>
@@ -716,12 +729,13 @@ const ModalNewPersonnel=(props)=>{
 
 //Liste des employés
 const Personnels = () => {
-
+const [access,setAccess]=useState(true)
 const [data,setData]=useState(employeData)
         const handleDelete = itemId => {
             const items = data.filter(item => item.id !== itemId);
             setData(items)
             alert(JSON.stringify(items))
+            setAccess(false)
           };
     
     
@@ -751,8 +765,8 @@ const [data,setData]=useState(employeData)
                 'options':
                   (item)=>(
                     <td> 
-                    <ModalInfo showing={false} nom={item.nom}/>
-                    <ModalEdit showing={false} employe={item}/>
+                    <ModalInfo showing={false}  nom={item.nom}/>
+                    <ModalEdit showing={false} access={access} employe={item}/>
                     <ModalHistorique showing={false} nom={item.nom}/>
                     <ModalDelete showing={false} nom={item.nom} onDelete={handleDelete} id={item.id} />
                     
