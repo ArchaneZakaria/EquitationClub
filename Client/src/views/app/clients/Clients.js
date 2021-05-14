@@ -60,12 +60,12 @@ const getBadge = (status) => {
   }
 };
 const fields = [
-  "nom",
-  "prenom",
+  { key: 'nom', _style: { width: '15%'} },
+  { key: 'prenom', _style: { width: '15'} },
   "DateNaissance",
   "typeforfait",
   "StatusP",
-  "options",
+  { key: 'options', _style: { width: '22%'} },
 ];
 const fieldsInfo = [
   "NomComplet",
@@ -1044,26 +1044,16 @@ const Clients = () => {
                   options: (item) => (
                     <td>
                       <ModalInfo />
-                      <ModalEdit client={item} />
+                      <ModalEdit client={item} showing={false}/>
+                      <ModalAssurance client ={item} showing={false}/>
+                      <ModalInscription client ={item} showing={false}/>
                       <ModalDelete
                         showing={false}
                         nom={item.nom}
                         onDelete={handleDelete}
                         id={item.id}
                       />
-                      <div class="dropdown" >
-                        <CButton shape='pill' color = 'secondary' size='sm'>
-                        <FontAwesomeIcon size="sm" icon={faPlusSquare} />
-                        </CButton>
-                        <div class="dropdown-content">
-                          <a>
-                            <ModalInscription  client={item} />
-                          </a>
-                          <a>
-                            <ModalAssurance client={item} />
-                          </a>
-                        </div>
-                      </div>
+                      
                     </td>
                   ),
                 }}
