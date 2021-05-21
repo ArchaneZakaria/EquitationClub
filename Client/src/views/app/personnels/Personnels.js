@@ -556,6 +556,7 @@ const ModalInfo=(props)=>{
 const ModalNewPersonnel=(props)=>{
 
     const schema=yup.object().shape({
+        matricule:yup.string().trim().required('Le matricule est obligatoire'),
         nom:yup.string().trim().required('Le nom est obligatoire').default('sss'),
         prenom:yup.string().trim().required('Le prenom est obligatoire'),
         email:yup.string().trim().email('L email est incorrect').required('L email est obligatoire'),
@@ -593,6 +594,16 @@ const ModalNewPersonnel=(props)=>{
                         <CModalBody>
                         <CForm action="#" method="post" encType="multipart/form-data" className="form-horizontal" onSubmit={handleSubmit(onSubmit)}>
                 
+                  <CFormGroup row>
+                  
+                  <CCol md="3">
+                    <CLabel htmlFor="nom-input">Matricule</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                  <input className="col-md-12" type="text" placeholder="Veuillez saisir le matricule" {...register("matricule")}/>
+                  {formState.errors.matricule &&errorMessage(formState.errors.matricule.message)}
+                  </CCol>
+                </CFormGroup>
                 <CFormGroup row>
                         
                   <CCol md="3">
@@ -683,41 +694,13 @@ const ModalNewPersonnel=(props)=>{
                       <input className="col-md-12" type="date" {...register("dateNaissance")}/>
                   </CCol>
                 </CFormGroup>
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="select">Role de l'utilisateur</CLabel>
-                  </CCol>
-                  <CCol xs="12" md="9">
-                    <select className="col-md-12" {...register("role")}>
-                      <option value="">Please select</option>
-                        <option value="client">Client</option>
-                        <option value="employe">Employé </option>
-                    </select>
-                      
-                  </CCol>
-                </CFormGroup>
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="select2">Type du forfait</CLabel>
-                  </CCol>
-                  <CCol xs="12" md="9">
-                    <CSelect custom name="select2" id="select2">
-                      <option value="0">Please select</option>
-                      <option value="1">Mensuel</option>
-                      <option value="2">Trimestriel </option>
-                    </CSelect>
-                  </CCol>
-                </CFormGroup>
                 <CButton type="submit" size="sm" color="primary" ><CIcon name="cil-scrubber"/> Créer</CButton>
-              <CButton type="reset" size="sm" color="danger"><CIcon name="cil-ban" /> Annuler</CButton>
+              <CButton type="reset" size="sm" color="danger" onClick={() => setLarge(false)}><CIcon name="cil-ban" /> Annuler</CButton>
               </CForm>
                         </CModalBody>
                         <CModalFooter>
                             {' '}
-                            <CButton 
-                            color="secondary" 
-                            onClick={() => setLarge(false)}
-                            >Fermer</CButton>
+                            
                         </CModalFooter>
             </CModal>
             </React.Fragment>

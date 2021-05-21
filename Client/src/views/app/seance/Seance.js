@@ -275,7 +275,7 @@ render(){
             </CCardHeader>
             <CCardBody>
             <ModalNewSeance showing={this.state.show} sum={this.onAddClick.bind(this)}/>
-                <ScheduleComponent ref={t => this.scheduleObj = t}  eventSettings={{dataSource:this.data}} firstDayOfWeek={1} startHour={'08:00'} endHour={'19:00'} readonly={false} timezone={'MA'} 
+                <ScheduleComponent ref={t => this.scheduleObj = t}  eventSettings={{dataSource:this.data}} firstDayOfWeek={1} startHour={'08:00'} endHour={'19:00'} readonly={true} timezone={'MA'} 
                 showHeaderBar={true} timeScale={{ interval: 60, slotCount: 1 }} group={{ enableCompactView: false }}>
                             <ResourcesDirective>
                                     <ResourceDirective field='priorite' title='Priorite Type' name='MeetingRoom' allowMultiple={true} 
