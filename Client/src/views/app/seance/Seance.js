@@ -1,5 +1,6 @@
 import React, { Fragment, useState }  from 'react'
 import * as ReactDOM from 'react-dom';
+import { L10n,setCulture} from '@syncfusion/ej2-base';
 import {Inject,ScheduleComponent,Day,Week,WorkWeek,Month,Agenda,ResourcesDirective, ResourceDirective,EventSettingsModel} from '@syncfusion/ej2-react-schedule'
 import { useForm } from "react-hook-form";
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -225,8 +226,8 @@ const Data=[{
 {
   Id: 3,
   Subject: 'Elevage',
-  StartTime:  new Date('May 14, 2021 08:30:00'),
-  EndTime:  new Date('May 14, 2021 10:30:00'),
+  StartTime:  new Date('May 22, 2021 08:30:00'),
+  EndTime:  new Date('May 22, 2021 10:30:00'),
   IsAllDay: false,
   Status: 'Completed',
   Priority: 'High'
@@ -235,8 +236,8 @@ const Data=[{
   Id: 4,
   Subject: 'Palfrenage',
   Description: 'Meeting to discuss support plan.',
-  StartTime:  new Date('May 14, 2021 08:30:00'),
-  EndTime:  new Date('May 14, 2021 10:30:00'),
+  StartTime:  new Date('May 24, 2021 08:30:00'),
+  EndTime:  new Date('May 24, 2021 10:30:00'),
   IsAllDay: false,
   Status: 'Completed',
   Priority: 'High',
@@ -244,7 +245,115 @@ const Data=[{
   priorite:1
 }];
 //Le composant principal
-
+L10n.load({
+  "en": {
+      "schedule": {
+          "day": "Jour",
+          "week": "Semaine",
+          "workWeek": "Work Week",
+          "month": "Mois",
+          "agenda": "Agenda",
+          "weekAgenda": "Week Agenda",
+          "workWeekAgenda": "Work Week Agenda",
+          "monthAgenda": "Month Agenda",
+          "today": "Aujourd'hui",
+          "noEvents": "Aucun évenements",
+          "emptyContainer": "There are no events scheduled on this day.",
+          "allDay": "Toute la journée",
+          "start": "Début",
+          "end": "Fin",
+          "more": "Plus",
+          "close": "Fermer",
+          "cancel": "Annuler",
+          "noTitle": "(No Title)",
+          "delete": "Supprimer",
+          "deleteEvent": "Supprimer séance",
+          "deleteMultipleEvent": "Delete Multiple Events",
+          "selectedItems": "Items selected",
+          "deleteSeries": "Delete Series",
+          "edit": "Edit",
+          "editSeries": "Edit Series",
+          "editEvent": "Modifier la séance",
+          "createEvent": "Créer",
+          "subject": "Sujet",
+          "addTitle": "Ajouter titre",
+          "moreDetails": "Plus de détails",
+          "save": "Enregistrer",
+          "editContent": "Do you want to edit only this event or entire series?",
+          "deleteRecurrenceContent": "Do you want to delete only this event or entire series?",
+          "deleteContent": "Vous étes sur de vouloir supprimer cette séance?",
+          "deleteMultipleContent": "Are you sure you want to delete the selected events?",
+          "newEvent": "Nouvelle séance",
+          "title": "Titre",
+          "location": "Lieu",
+          "description": "Description",
+          "timezone": "Timezone",
+          "startTimezone": "Start Timezone",
+          "endTimezone": "End Timezone",
+          "repeat": "Répeter",
+          "saveButton": "Enregistrer",
+          "cancelButton": "Annuler",
+          "deleteButton": "Supprimer",
+          "recurrence": "Recurrence",
+          "wrongPattern": "The recurrence pattern is not valid.",
+          "seriesChangeAlert": "The changes made to specific instances of this series will be cancelled and those events will match the series again.",
+          "createError": "The duration of the event must be shorter than how frequently it occurs. Shorten the duration, or change the recurrence pattern in the recurrence event editor.",
+          "recurrenceDateValidation": "Some months have fewer than the selected date. For these months, the occurrence will fall on the last date of the month.",
+          "sameDayAlert": "Two occurrences of the same event cannot occur on the same day.",
+          "editRecurrence": "Edit Recurrence",
+          "repeats": "Repeats",
+          "alert": "Alert",
+          "startEndError": "The selected end date occurs before the start date.",
+          "invalidDateError": "The entered date value is invalid.",
+          "ok": "Ok",
+          "occurrence": "Occurrence",
+          "series": "Series",
+          "previous": "Previous",
+          "next": "Next",
+          "timelineDay": "Timeline Day",
+          "timelineWeek": "Timeline Week",
+          "timelineWorkWeek": "Timeline Work Week",
+          "timelineMonth": "Timeline Month",
+          "expandAllDaySection": "Expand",
+          "collapseAllDaySection": "Collapse"
+      },
+      "recurrenceeditor": {
+          "none": "None",
+          "daily": "Quotidiennement",
+          "weekly": "Hebdomadairement",
+          "monthly": "Mensuelement",
+          "month": "Mois",
+          "yearly": "Annuelement",
+          "never": "Jamais",
+          "until": "Jusqu'a",
+          "count": "Nombre",
+          "first": "Premier",
+          "second": "Deuxiéme",
+          "third": "Troisieme",
+          "fourth": "Quatriéme",
+          "last": "Dernier",
+          "repeat": "Répéter",
+          "repeatEvery": "Répéter chaque",
+          "on": "Répéter dans",
+          "end": "Fin",
+          "onDay": "Jour",
+          "days": "Jour(s)",
+          "weeks": "Semaine(s)",
+          "months": "Mois(s)",
+          "years": "Année(s)",
+          "every": "Chaque",
+          "summaryTimes": "fois",
+          "summaryOn": "dans",
+          "summaryUntil": "Jusqu'a",
+          "summaryRepeat": "Répéter",
+          "summaryDay": "jour(s)",
+          "summaryWeek": "semaine(s)",
+          "summaryMonth": "mois(s)",
+          "summaryYear": "année(s)"
+      }
+  }
+  });
+  setCulture('en');
 class Seance extends React.Component{
   constructor() {
     super(...arguments);
@@ -275,14 +384,14 @@ render(){
             </CCardHeader>
             <CCardBody>
             <ModalNewSeance showing={this.state.show} sum={this.onAddClick.bind(this)}/>
-                <ScheduleComponent ref={t => this.scheduleObj = t}  eventSettings={{dataSource:this.data}} firstDayOfWeek={1} startHour={'08:00'} endHour={'19:00'} readonly={true} timezone={'MA'} 
+                <ScheduleComponent ref={t => this.scheduleObj = t}  eventSettings={{dataSource:this.data}} firstDayOfWeek={1} startHour={'08:00'} endHour={'19:00'}   readonly={false} timezone={'FR'} 
                 showHeaderBar={true} timeScale={{ interval: 60, slotCount: 1 }} group={{ enableCompactView: false }}>
                             <ResourcesDirective>
                                     <ResourceDirective field='priorite' title='Priorite Type' name='MeetingRoom' allowMultiple={true} 
                                     dataSource={this.prioriteData} textField='priorite' idField='id' colorField='color'>
                             </ResourceDirective>
                             </ResourcesDirective>
-                    <Inject services={[Day,Week,WorkWeek,Month,Agenda]}></Inject>
+                    <Inject services={[Day,Week,Month,Agenda]}></Inject>
                 </ScheduleComponent>
             
             </CCardBody>
@@ -319,7 +428,7 @@ return(
             <CCardBody style={{backgroundColor:"#051612"}}>
             <ModalNewSeance showing={false} sum={sas}/>
             <CButton color="primary" onClick={() => {} }ref={t => this.buttonObj = t} onClick={this.onAddClick.bind(this)} className="mr-1">Nouvelle séance</CButton>
-                <ScheduleComponent ref={t => this.scheduleObj = t}  eventSettings={{dataSource:Data}} firstDayOfWeek={1} startHour={'08:00'} endHour={'19:00'} readonly={true} timezone={'MA'} 
+                <ScheduleComponent ref={t => this.scheduleObj = t}  eventSettings={{dataSource:Data}} firstDayOfWeek={1} startHour={'08:00'} endHour={'19:00'} readonly={false} timezone={'MA'} 
                 showHeaderBar={true} timeScale={{ interval: 60, slotCount: 1 }} group={{ enableCompactView: false }}>
                             <ResourcesDirective>
                                     <ResourceDirective field='priorite' title='Priorite Type' name='MeetingRoom' allowMultiple={true} 

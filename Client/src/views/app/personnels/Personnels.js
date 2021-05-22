@@ -32,6 +32,7 @@ import {
   CTabs,
   CTabContent,
   CTabPane,
+  CSwitch
 } from '@coreui/react'
 import { CChartPie } from '@coreui/react-chartjs';
 import { useForm } from "react-hook-form";
@@ -50,10 +51,10 @@ import { faChevronDown,faChevronUp,faHistory, faEllipsisH,faEdit,faInfoCircle,fa
 //Les champs du datatable historique
 const fieldsHistory=[
     { key: 'Code', _style: { width: '15%'} },
-    { key: 'Description', _style: { width: '22.5%'} },
+    { key: 'Type', _style: { width: '12.5%'} },
+    { key: 'Description', _style: { width: '32.5%'} },
     { key: 'Date', _style: { width: '12.5%'} },
     { key: 'Etat', _style: { width: '12.5%'} },
-    { key: 'Remarque', _style: { width: '22.5%'} },
     {
         key: 'show_details',
         label: '',
@@ -66,11 +67,11 @@ const fieldsHistory=[
 //Les champs du datatable employe
 
 const fieldsEmploye=[
-    { key: 'nom', _style: { width: '15%'} },
-    { key: 'prenom', _style: { width: '15'} },
-    { key: 'email', _style: { width: '22.5%'} },
-    { key: 'matricule', _style: { width: '12.5%'} },
+    { key: 'matricule', _style: { width: '15%'} },
+    { key: 'nom', _style: { width: '15'} },
+    { key: 'prenom', _style: { width: '22.5%'} },
     { key: 'fonction', _style: { width: '12.5%'} },
+    { key: 'departement', _style: { width: '12.5%'} },
     { key: 'options', _style: { width: '22.5%'} },
     
   ]
@@ -80,10 +81,9 @@ const fieldsEmploye=[
 
 const fieldsMoreInfo=[
     { key: 'Type' },
-    { key: 'Séance' },
     { key: 'Client' },
-    { key: 'Paddock' },
     { key: 'Cheval' },
+    { key: 'Remarque' },
     
   ]
   //L'option qui permet de faire une tabulation
@@ -140,7 +140,6 @@ const ModalHistorique=(props)=>{
               <CTabContent>
                 <CTabPane data-tab="historique">
                 <CDataTable 
-                                    tableFilter
                                     clickableRows
                                     items={historyData}
                                     fields={fieldsHistory}
@@ -225,25 +224,29 @@ const ModalHistorique=(props)=>{
 //L'option qui permet de modifier un employé
 
 const ModalEdit=(props)=>{
-  
+    const [matricule,setMatricule]=React.useState(props.employe.matricule)
     const [nom,setNom]=React.useState(props.employe.nom)
     const [prenom,setPrenom]=React.useState(props.employe.prenom)
     const [email,setEmail]=React.useState(props.employe.email)
-    const [password,setPassword]=React.useState('')
-    const [tele,setTele]=React.useState('')
-    const [adresse,setAdresse]=React.useState('')
-    const [dateNaissance,setDateNaissance]=React.useState('')
+    const [fonction,setFonction]=React.useState(props.employe.fonction)
+    const [departement,setDepartement]=React.useState(props.employe.departement)
+    const [password,setPassword]=React.useState()
+    const [tele,setTele]=React.useState(props.employe.numeroTelephone)
+    const [adresse,setAdresse]=React.useState(props.employe.adresse)
+    const [dateEmbauche,setDateEmbauche]=React.useState('')
     const [defaults,setDefaults]=React.useState({
-      nom:props.employe.nom,
-      prenom:props.employe.prenom,
-      email:props.employe.email,
+      nom:nom,
+      prenom:prenom,
+      email:email,
+      telephone:tele,
   })
     
     const schema=yup.object().shape({
-        nom:yup.string().trim().required('Le nom est obligatoire'),
+        matricule:yup.string().trim().required('Le matricule est obligatoire'),
+        nom:yup.string().trim().required('Le nom est obligatoire').default('sss'),
         prenom:yup.string().trim().required('Le prenom est obligatoire'),
         email:yup.string().trim().email('L email est incorrect').required('L email est obligatoire'),
-        password:yup.string().max(15).required('Le mot de passe est obligatoire').min(4,'Le mot de passe doit contenir au moins 4 caractéres'),
+        password:yup.string().trim().max(15).required('Le mot de passe est obligatoire').min(4,'Le mot de passe doit contenir au moins 4 caractéres'),
         confirmPassword:yup.string().oneOf([yup.ref("password",),null],'Les mots de passe ne correspondent pas !'),
         telephone:yup.number().required('Le numero de telephone est obligatoire'),
         fonction:yup.string().required('La fonction est obligatoire'),
@@ -259,6 +262,10 @@ const ModalEdit=(props)=>{
         setValue("nom" , nom)
         setValue("prenom" , prenom)
         setValue("email" , email)
+        setValue("telephone" , tele)
+        setValue("matricule" , matricule)
+        setValue("fonction" , fonction)
+        setValue("departement" , departement)
       });
      
     
@@ -296,7 +303,15 @@ const ModalEdit=(props)=>{
                         </CModalHeader>
                         <CModalBody>
                         <CForm action="#" method="post" encType="multipart/form-data" className="form-horizontal" onSubmit={handleSubmit(onSubmit)}>
-                
+                        <CFormGroup row>
+                <CCol md="3">
+                    <CLabel htmlFor="nom-input">Matricule</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                  <input className="col-md-12" type="text" placeholder="Veuillez saisir le matricule" {...register("matricule")}/>
+                  {formState.errors.matricule &&errorMessage(formState.errors.matricule.message)}
+                  </CCol>
+                </CFormGroup>
                 <CFormGroup row>
                         
                   <CCol md="3">
@@ -318,10 +333,28 @@ const ModalEdit=(props)=>{
                 </CFormGroup>
                 <CFormGroup row>
                   <CCol md="3">
+                    <CLabel htmlFor="adresse-input">Fonction</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                  <input className="col-md-12" type="text" placeholder="Veuillez saisir la fonction" {...register("fonction")}/>
+                  {formState.errors.fonction &&errorMessage(formState.errors.fonction.message)}
+                  </CCol>
+                </CFormGroup>
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="adresse-input">Département</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                  <input className="col-md-12" type="text" placeholder="Veuillez saisir le département" {...register("departement")}/>
+                  {formState.errors.departement &&errorMessage(formState.errors.departement.message)}
+                  </CCol>
+                </CFormGroup>
+                <CFormGroup row>
+                  <CCol md="3">
                     <CLabel htmlFor="email-input">Adresse email</CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
-                  <input className="col-md-12" type="text" placeholder="Veuillez saisir l'email" {...register("email")} />
+                  <input className="col-md-12" type="text" placeholder="Veuillez saisir l'email" {...register("email")}/>
                   {formState.errors.email &&errorMessage(formState.errors.email.message)}
                   </CCol>
                 </CFormGroup>
@@ -363,53 +396,21 @@ const ModalEdit=(props)=>{
                 </CFormGroup>
                 <CFormGroup row>
                   <CCol md="3">
-                    <CLabel htmlFor="adresse-input">Fonction</CLabel>
+                    <CLabel htmlFor="date-naissance-input">Date d'embauche</CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
-                  <input className="col-md-12" type="text" placeholder="Veuillez saisir la fonction" {...register("fonction")}/>
-                  {formState.errors.fonction &&errorMessage(formState.errors.fonction.message)}
+                      <input className="col-md-12" type="date" {...register("dateEmbauche")}/>
                   </CCol>
                 </CFormGroup>
                 <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="adresse-input">Département</CLabel>
+                  <CCol tag="label" sm="3" className="col-form-label">
+                   Administrateur
                   </CCol>
-                  <CCol xs="12" md="9">
-                  <input className="col-md-12" type="text" placeholder="Veuillez saisir la fonction" {...register("departement")}/>
-                  {formState.errors.departement &&errorMessage(formState.errors.departement.message)}
-                  </CCol>
-                </CFormGroup>
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="date-naissance-input">Date de naissance</CLabel>
-                  </CCol>
-                  <CCol xs="12" md="9">
-                      <input className="col-md-12" type="date" {...register("dateNaissance")}/>
-                  </CCol>
-                </CFormGroup>
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="select">Role de l'utilisateur</CLabel>
-                  </CCol>
-                  <CCol xs="12" md="9">
-                    <select className="col-md-12" {...register("role")}>
-                      <option value="">Please select</option>
-                        <option value="client">Client</option>
-                        <option value="employe">Employé </option>
-                    </select>
-                      
-                  </CCol>
-                </CFormGroup>
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="select2">Type du forfait</CLabel>
-                  </CCol>
-                  <CCol xs="12" md="9">
-                    <CSelect custom name="select2" id="select2">
-                      <option value="0">Please select</option>
-                      <option value="1">Mensuel</option>
-                      <option value="2">Trimestriel </option>
-                    </CSelect>
+                  <CCol sm="9">
+                    <CSwitch
+                      className="mr-1"
+                      color="primary"
+                    />                    
                   </CCol>
                 </CFormGroup>
                 <CButton type="submit" size="sm" color="primary" ><CIcon name="cil-scrubber"/> Créer</CButton>
@@ -516,9 +517,26 @@ const Options=(props)=>{
 
 
 //l'option qui permet de consulter les infos de l'employé
+const fieldsInfo = [
+  "email",
+  "numeroTelephone",
+  "adresse",
+  "dateEmbauche"
+];
 
 const ModalInfo=(props)=>{
+    const [email,setEmail]=React.useState(props.employe.email)
+    const [numeroTelephone,setNumeroTelephone]=React.useState(props.employe.numeroTelephone)
+    const [adresse,setAdresse]=React.useState(props.employe.numeroTelephone)
+    const [dateEmbauche,setDateEmbauche]=React.useState(props.employe.dateEmbauche)
     const [modal, setModal] =React.useState(props.showing)
+
+    const data=[{
+      "email":email,
+      "numeroTelephone": numeroTelephone,
+      "adresse": adresse,
+      "dateEmbauche":dateEmbauche
+    }]
     return(
             <React.Fragment>
                 <CButton size="sm" shape="pill" color="secondary" className="" style={{position: "relative",float:"left"}}  title="Plus d informations"  onClick={() => setModal(!modal)}>
@@ -527,16 +545,25 @@ const ModalInfo=(props)=>{
                      <CModal 
                         show={modal} 
                         onClose={setModal}
+                        size="lg"
                         >
                         <CModalHeader closeButton>
-                            <CModalTitle>Informations générales :{props.nom}</CModalTitle>
+                            <CModalTitle>Informations générales :</CModalTitle>
                         </CModalHeader>
                         <CModalBody>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
-                            et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                            aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                            culpa qui officia deserunt mollit anim id est laborum.
+                   
+                   <CDataTable
+                            clickableRows
+                            items={data}
+                            fields={fieldsInfo}
+                            hover
+                            striped
+                            bordered
+                            size="sm"
+                            itemsPerPage={10}
+                            pagination
+                          />
+                       
                         </CModalBody>
                         <CModalFooter>
                             <CButton 
@@ -625,6 +652,24 @@ const ModalNewPersonnel=(props)=>{
                 </CFormGroup>
                 <CFormGroup row>
                   <CCol md="3">
+                    <CLabel htmlFor="adresse-input">Fonction</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                  <input className="col-md-12" type="text" placeholder="Veuillez saisir la fonction" {...register("fonction")}/>
+                  {formState.errors.fonction &&errorMessage(formState.errors.fonction.message)}
+                  </CCol>
+                </CFormGroup>
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="adresse-input">Département</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                  <input className="col-md-12" type="text" placeholder="Veuillez saisir la fonction" {...register("departement")}/>
+                  {formState.errors.departement &&errorMessage(formState.errors.departement.message)}
+                  </CCol>
+                </CFormGroup>
+                <CFormGroup row>
+                  <CCol md="3">
                     <CLabel htmlFor="email-input">Adresse email</CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
@@ -670,28 +715,21 @@ const ModalNewPersonnel=(props)=>{
                 </CFormGroup>
                 <CFormGroup row>
                   <CCol md="3">
-                    <CLabel htmlFor="adresse-input">Fonction</CLabel>
+                    <CLabel htmlFor="date-naissance-input">Date d'embauche</CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
-                  <input className="col-md-12" type="text" placeholder="Veuillez saisir la fonction" {...register("fonction")}/>
-                  {formState.errors.fonction &&errorMessage(formState.errors.fonction.message)}
+                      <input className="col-md-12" type="date" {...register("dateEmbauche")}/>
                   </CCol>
                 </CFormGroup>
                 <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="adresse-input">Département</CLabel>
+                  <CCol tag="label" sm="3" className="col-form-label">
+                   Administrateur
                   </CCol>
-                  <CCol xs="12" md="9">
-                  <input className="col-md-12" type="text" placeholder="Veuillez saisir la fonction" {...register("departement")}/>
-                  {formState.errors.departement &&errorMessage(formState.errors.departement.message)}
-                  </CCol>
-                </CFormGroup>
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="date-naissance-input">Date de naissance</CLabel>
-                  </CCol>
-                  <CCol xs="12" md="9">
-                      <input className="col-md-12" type="date" {...register("dateNaissance")}/>
+                  <CCol sm="9">
+                    <CSwitch
+                      className="mr-1"
+                      color="primary"
+                    />                    
                   </CCol>
                 </CFormGroup>
                 <CButton type="submit" size="sm" color="primary" ><CIcon name="cil-scrubber"/> Créer</CButton>
@@ -748,7 +786,7 @@ const [data,setData]=useState(employeData)
                 'options':
                   (item)=>(
                     <td> 
-                    <ModalInfo showing={false}  nom={item.nom}/>
+                    <ModalInfo showing={false}  employe={item}/>
                     <ModalEdit showing={false} access={access} employe={item}/>
                     <ModalHistorique showing={false} nom={item.nom}/>
                     <ModalDelete showing={false} nom={item.nom} onDelete={handleDelete} id={item.id} />

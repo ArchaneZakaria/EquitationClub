@@ -121,14 +121,16 @@ const ModalDelete = (props) => {
 
 const ModalInfo = (props) => {
   const [modal, setModal] = React.useState(props.showing);
-  const data=[{
-    "datePremiereInscription":props.client.datePremiereInscription,
-    "nombreSeances": props.client.nombreSeances,
-    "nombrePensions": props.client.nombrePensions,
-  }]
+  
   const [datePremiereInscription,setdatePremiereInscription]=React.useState(props.client.datePremiereInscription)
   const [nombreSeances,setnombreSeances]=React.useState(props.client.nombreSeances)
   const [nombrePensions,setnombrePensions]=React.useState(props.client.nombrePensions)
+
+  const data=[{
+    "datePremiereInscription":datePremiereInscription,
+    "nombreSeances": nombreSeances,
+    "nombrePensions": nombrePensions,
+  }]
   const table =["datePremiereInscription","nombreSeances","nombrePensions"]
   return (
     <React.Fragment>
