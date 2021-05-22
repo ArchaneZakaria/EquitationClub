@@ -225,7 +225,7 @@ const Data=[{
 },
 {
   Id: 3,
-  Subject: 'Elevage',
+  Titre: 'Elevage',
   StartTime:  new Date('May 22, 2021 08:30:00'),
   EndTime:  new Date('May 22, 2021 10:30:00'),
   IsAllDay: false,
@@ -303,8 +303,8 @@ L10n.load({
           "editRecurrence": "Edit Recurrence",
           "repeats": "Repeats",
           "alert": "Alert",
-          "startEndError": "The selected end date occurs before the start date.",
-          "invalidDateError": "The entered date value is invalid.",
+          "startEndError": "La date de fin est invalide.",
+          "invalidDateError": "La date saisie est invalide.",
           "ok": "Ok",
           "occurrence": "Occurrence",
           "series": "Series",
@@ -384,7 +384,14 @@ render(){
             </CCardHeader>
             <CCardBody>
             <ModalNewSeance showing={this.state.show} sum={this.onAddClick.bind(this)}/>
-                <ScheduleComponent ref={t => this.scheduleObj = t}  eventSettings={{dataSource:this.data}} firstDayOfWeek={1} startHour={'08:00'} endHour={'19:00'}   readonly={false} timezone={'FR'} 
+                <ScheduleComponent ref={t => this.scheduleObj = t}  eventSettings={{dataSource:this.data,fields: {
+                id: 'Id',
+                subject: { name: 'Titre', title: 'Titre' },
+                location: { name: 'Lieu', title: 'Lieu' },
+                description: { name: 'Description', title: 'Description de la séance' },
+                startTime: { name: 'StartTime', title: 'Date de ébut' },
+                endTime: { name: 'EndTime', title: 'Date de fin' }
+            }}} firstDayOfWeek={1} startHour={'08:00'} endHour={'19:00'}   readonly={false} timezone={'FR'} 
                 showHeaderBar={true} timeScale={{ interval: 60, slotCount: 1 }} group={{ enableCompactView: false }}>
                             <ResourcesDirective>
                                     <ResourceDirective field='priorite' title='Priorite Type' name='MeetingRoom' allowMultiple={true} 
