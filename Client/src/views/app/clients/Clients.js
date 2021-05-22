@@ -48,9 +48,9 @@ import {
 import clientData from "../clients/ClientData";
 const getBadge = (status) => {
   switch (status) {
-    case "Paid":
+    case "Payé":
       return "success";
-    case "Unpaid":
+    case "Non payé":
       return "danger";
     default:
       return "primary";
@@ -60,8 +60,8 @@ const fields = [
   { key: 'nom', _style: { width: '15%'} },
   { key: 'prenom', _style: { width: '15'} },
   "DateNaissance",
-  "typeforfait",
-  "StatusP",
+  "typeForfait",
+  "statusPayement",
   { key: 'options', _style: { width: '22%'} },
 ];
 const fieldsInfo = [
@@ -93,19 +93,13 @@ const ModalDelete = (props) => {
       </CButton>
       <CModal show={modal} onClose={setModal}>
         <CModalHeader closeButton>
-          <CModalTitle>Modal title</CModalTitle>
+          <CModalTitle>Supprimer le client : {props.nom}</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
+          Etes-vous sur de vouloir supprimer le client ? 
         </CModalBody>
         <CModalFooter>
-          <CButton color="primary" onClick={deleting}>
+          <CButton color="danger" onClick={deleting}>
             DELETE
           </CButton>{" "}
           <CButton color="secondary" onClick={() => setModal(false)}>
@@ -119,11 +113,9 @@ const ModalDelete = (props) => {
 
 const ModalInfo = (props) => {
   const [modal, setModal] = React.useState(props.showing);
-  
   const [datePremiereInscription,setdatePremiereInscription]=React.useState(props.client.datePremiereInscription)
   const [nombreSeances,setnombreSeances]=React.useState(props.client.nombreSeances)
   const [nombrePensions,setnombrePensions]=React.useState(props.client.nombrePensions)
-
   const data=[{
     "datePremiereInscription":datePremiereInscription,
     "nombreSeances": nombreSeances,
@@ -138,7 +130,7 @@ const ModalInfo = (props) => {
         color="secondary"
         className=""
         style={{ position: "relative", float: "left" }}
-        title="Plus d informations"
+        title="Plus d'informations"
         onClick={() => setModal(!modal)}
       >
         <FontAwesomeIcon size="sm" icon={faInfoCircle} />
@@ -151,13 +143,8 @@ const ModalInfo = (props) => {
         <CRow>
         <CCol>
           <CCard>
-            <CCardHeader onClick={() => alert(JSON.stringify(data))} >
-              Information Générales :
-
-            </CCardHeader>
             <CCardBody>
             <CDataTable
-                tableFilter
                 clickableRows
                 items={data}
                 fields={fieldsInfo}
@@ -185,7 +172,7 @@ const ModalInfo = (props) => {
 
 const ModalNewClient = (props) => {
   const schema = yup.object().shape({
-    nom: yup.string().required("Le nom est obligatoire"),
+    nom: yup.string().trim().required("Le nom est obligatoire"),
     prenom: yup.string().required("Le prenom est obligatoire"),
     CIN: yup.string().required("Le CIN est obligatoire"),
     email: yup
@@ -697,19 +684,15 @@ const ModalEdit = (props) => {
                   </select>
                 </CCol>
               </CFormGroup>
-              <CButton type="submit" size="sm" color="primary">
-                <CIcon name="cil-scrubber" /> Créer
-              </CButton>
-              <CButton type="reset" size="sm" color="danger">
+              <CButton  size="sm" color="danger" onClick={() => setLarge(false)} className="Boutton">
                 <CIcon name="cil-ban" /> Annuler
               </CButton>
+              <CButton type="submit" size="sm" color="primary" className="Boutton">
+                <CIcon name="cil-scrubber" /> Créer
+              </CButton>
+
             </CForm>
           </CModalBody>
-          <CModalFooter>
-            <CButton color="secondary" onClick={() => setLarge(false)}>
-              Fermer
-            </CButton>
-          </CModalFooter>
         </CModal>
       </React.Fragment>
     );
@@ -958,7 +941,7 @@ const ModalForfait = (props) => {
                 <select className="col-md-12" {...register("TypeForfait")}>
                     <option value="">Choisissez le type du forfait</option>
                     <option value="mensuel">Mensuel</option>
-                    <option value="trimestriel">trimestriel </option>
+                    <option value="trimestriel">Trimestriel </option>
                   </select>
                   {formState.errors.typeForfait &&
                     errorMessage(formState.errors.typeForfait.message)}
@@ -1216,11 +1199,11 @@ const Clients = () => {
                       
                     </td>
                   ),
-                    'StatusP':
+                    'statusPayement':
                       (item)=>(
                         <td>
-                          <CBadge color={getBadge(item.StatusP)}>
-                            {item.StatusP}
+                          <CBadge color={getBadge(item.statusPayement)}>
+                            {item.statusPayement}
                           </CBadge>
                         </td>
                       )

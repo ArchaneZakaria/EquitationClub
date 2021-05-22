@@ -215,18 +215,18 @@ const ModalHistorique = (props) => {
     <React.Fragment>
       <CCard show={modal} onClose={setModal} size="lg">
         <CCardHeader closeButton>
-          <CCardTitle>Facturations</CCardTitle>
+          <CCardTitle>Paiements</CCardTitle>
         </CCardHeader>
         <CCardBody>
           <CTabs activeTab="1">
             <CNav variant="tabs">
               <CNavItem>
                 <CNavLink data-tab="1" color="danger">
-                  Facturations non payé
+                  A régler
                 </CNavLink>
               </CNavItem>
               <CNavItem>
-                <CNavLink data-tab="2">Facturations payé</CNavLink>
+                <CNavLink data-tab="2">Liste</CNavLink>
               </CNavItem>
             </CNav>
             <CTabContent>
@@ -332,54 +332,7 @@ const ModalHistorique = (props) => {
                               </CCardBody>
                             </CCollapse>
                           </CCard>
-                          <CCard className="mb-0">
-                            <CCardHeader id="headingThree">
-                              <CButton
-                                block
-                                color="link"
-                                className="text-left m-0 p-0"
-                                onClick={() =>
-                                  setAccordion(accordion === 2 ? null : 2)
-                                }
-                              >
-                                <h5 className="m-0 p-0">Assurance</h5>
-                              </CButton>
-                            </CCardHeader>
-                            <CCollapse show={accordion === 2}>
-                              <CCardBody>
-                                <CRow>
-                                  <CCol>
-                                    <CCard>
-                                      <CCardBody>
-                                        <CDataTable
-                                          tableFilter
-                                          clickableRows
-                                          items={assurData}
-                                          fields={fieldsFactAssurance}
-                                          hover
-                                          striped
-                                          bordered
-                                          size="sm"
-                                          itemsPerPage={10}
-                                          pagination
-                                          scopedSlots={{
-                                            options: (item) => (
-                                              <td>
-                                                <ModalPayement
-                                                  client={item}
-                                                  showing={false}
-                                                />
-                                              </td>
-                                            ),
-                                          }}
-                                        />
-                                      </CCardBody>
-                                    </CCard>
-                                  </CCol>
-                                </CRow>
-                              </CCardBody>
-                            </CCollapse>
-                          </CCard>
+            
                         </div>
                       </CCardBody>
                     </CCard>

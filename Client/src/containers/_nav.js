@@ -51,7 +51,7 @@ const _nav =  [
     _tag: 'CSidebarNavItem',
     name: 'Chevaux',
     to: '/App/Chevaux',
-    icon: <FontAwesomeIcon icon={faHorseHead} style={{marginRight:"22px"}}/>,
+    icon: <FontAwesomeIcon icon={faHorseHead} style={{marginRight:"19px",marginLeft:"7px"}}/>,
   },
   {
     _tag: 'CSidebarNavItem',

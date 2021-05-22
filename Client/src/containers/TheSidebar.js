@@ -31,10 +31,9 @@ const TheSidebar = () => {
     >
       <CSidebarBrand className="d-md-down-none" to="/">
       <FontAwesomeIcon icon={faHorseHead} size="3x" />
-         EquiClub
+       EquiClub
       </CSidebarBrand>
       <CSidebarNav>
-
         <CCreateElement
           items={navigation}
           components={{
