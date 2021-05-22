@@ -147,7 +147,7 @@ const ModalPayement = (props) => {
                   <CLabel htmlFor="select">Type Paiement</CLabel>
                 </CCol>
                 <CCol xs="12" md="9">
-                  <select className="col-md-12" {...register("TypePaiement")}>
+                  <select className="col-md-12" {...register("typePaiement")}>
                     <option value="">Choisissez le Type du Paiement</option>
                     <option value="liquide">Liquide</option>
                     <option value="cheque">Cheque </option>
@@ -155,17 +155,16 @@ const ModalPayement = (props) => {
                   </select>
                 </CCol>
               </CFormGroup>
-              <CButton type="submit" size="sm" color="primary" onClick={() => alert("Payement affectué")}>
-                <CIcon name="cil-scrubber" /> Payer
-              </CButton>
-              <CButton  size="sm" color="danger" onClick={() => setLarge(false)} >
+              <CButton  size="sm" color="danger" className="Boutton" onClick={() => setLarge(false)} >
                 <CIcon name="cil-ban" /> Annuler
               </CButton>
+              <CButton type="submit" size="sm" color="primary" className="Boutton" onClick={() => typePaiement=="Liquide"? alert("Payement effectué"):alert("Payement effectué")}>
+                <CIcon name="cil-scrubber" /> Payer
+              </CButton>
+              
             </CForm>
           </CModalBody>
-          <CModalFooter>
-            
-          </CModalFooter>
+
         </CModal>
       </React.Fragment>
     );
@@ -219,14 +218,14 @@ const ModalHistorique = (props) => {
         </CCardHeader>
         <CCardBody>
           <CTabs activeTab="1">
-            <CNav variant="tabs">
+            <CNav variant="pills">
               <CNavItem>
-                <CNavLink data-tab="1" color="danger">
-                  A régler
+                <CNavLink data-tab="1">
+                  Liste des paiements à régler
                 </CNavLink>
               </CNavItem>
               <CNavItem>
-                <CNavLink data-tab="2">Liste</CNavLink>
+                <CNavLink data-tab="2">Liste des paiements effectué</CNavLink>
               </CNavItem>
             </CNav>
             <CTabContent>
@@ -246,7 +245,7 @@ const ModalHistorique = (props) => {
                                   setAccordion(accordion === 0 ? null : 0)
                                 }
                               >
-                                <h5 className="m-0 p-0" color="danger">
+                                <h5 className="m-2 p-0">
                                   Inscription
                                 </h5>
                               </CButton>
@@ -296,7 +295,7 @@ const ModalHistorique = (props) => {
                                   setAccordion(accordion === 1 ? null : 1)
                                 }
                               >
-                                <h5 className="m-0 p-0">Forfait</h5>
+                                <h5 className="m-2 p-0">Forfait</h5>
                               </CButton>
                             </CCardHeader>
                             <CCollapse show={accordion === 1}>
