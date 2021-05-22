@@ -41,18 +41,16 @@ import {
   faEllipsisV,
   faCalendar,
   faPlusSquareSquare,
-  faPlusSquare
+  faPlusSquare,
+  faUser,
+  faChild,
 } from "@fortawesome/free-solid-svg-icons";
 import clientData from "../clients/ClientData";
 const getBadge = (status) => {
   switch (status) {
-    case "Active":
+    case "Paid":
       return "success";
-    case "Inactive":
-      return "secondary";
-    case "Pending":
-      return "warning";
-    case "Banned":
+    case "Unpaid":
       return "danger";
     default:
       return "primary";
@@ -879,6 +877,154 @@ const ModalAssurance = (props) => {
     );
   }
 };
+const ModalForfait = (props) => {
+  const [typeForfait, setTypeForfait] = React.useState("");
+  const [dateDebut, setDateDebut] = React.useState("");
+  const [dateFin, setDateFin] = React.useState("");
+  const [montant, setMontant] = React.useState("");
+  const [typePaiement, setTypePaiement] = React.useState("");
+  const [nombreSeances, setnombreSeances] = React.useState("");
+
+
+  const schema = yup.object().shape({
+    typeForfait: yup.number(),
+    dateDebut: yup.date(),
+    dateFin: yup.date(),
+    nombreSeances: yup
+      .number()
+      .min(0, "Le nombre doit etre supérieur à zero."),
+      
+    montant: yup
+      .number()
+      .min(0, "Le montant doit etre supérieur à zero."),
+    typePaiement: yup.string()
+  });
+  const defaults = {
+    dateDebut: props.client.dateDebut,
+    prenom: props.client.prenom,
+    montant: props.client.montant,
+  };
+  const { register, handleSubmit, errors, formState } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: defaults,
+  });
+
+  const [large, setLarge] = useState(props.showing);
+
+  const errorMessage = (error) => {
+    return <CFormText color="danger">{error}</CFormText>;
+  };
+
+  const onSubmit = (data) => {
+    alert(JSON.stringify(data));
+  };
+  if (!props.client) {
+    return <React.Fragment></React.Fragment>;
+  } else {
+    return (
+      <React.Fragment>
+        <CButton
+          size="sm"
+          color="secondary"
+          shape="pill"
+          className=""
+          title="Ajouter forfait"
+          style={{ position: "relative", float: "left" }}
+          onClick={() => setLarge(!large)}
+        >
+          <FontAwesomeIcon size="sm" icon={faChild} />
+        </CButton>
+        <CModal show={large} onClose={setLarge} size="lg">
+          <CModalHeader closeButton>
+            <CModalTitle>
+              Ajouter forfait : {props.client.nom} {props.client.prenom}
+            </CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CForm
+              action="#"
+              method="post"
+              encType="multipart/form-data"
+              className="form-horizontal"
+              onSubmit={handleSubmit(onSubmit)}
+            >
+              <CFormGroup row>
+                <CCol md="3">
+                  <CLabel htmlFor="typeForfait-input">
+                    Type forfait
+                  </CLabel>
+                </CCol>
+                <CCol xs="12" md="9">
+                <select className="col-md-12" {...register("TypeForfait")}>
+                    <option value="">Choisissez le type du forfait</option>
+                    <option value="mensuel">Mensuel</option>
+                    <option value="trimestriel">trimestriel </option>
+                  </select>
+                  {formState.errors.typeForfait &&
+                    errorMessage(formState.errors.typeForfait.message)}
+                </CCol>
+              </CFormGroup>
+              <CFormGroup row>
+                <CCol md="3">
+                  <CLabel htmlFor="dateDebut-input">Date de début</CLabel>
+                </CCol>
+                <CCol xs="12" md="9">
+                  <input
+                    className="col-md-12"
+                    type="date"
+                    placeholder="Veuillez saisir la date de début"
+                    {...register("dateDebut")}
+                  />
+                  {formState.errors.dateDebut &&
+                    errorMessage(formState.errors.dateDebut.message)}
+                </CCol>
+              </CFormGroup>
+              <CFormGroup row>
+                <CCol md="3">
+                  <CLabel htmlFor="montant-input">montant</CLabel>
+                </CCol>
+                <CCol xs="12" md="9">
+                  <input
+                    className="col-md-12"
+                    type="text"
+                    placeholder="300"
+                    {...register("montant")}
+                  />
+                  {formState.errors.montant &&
+                    errorMessage(formState.errors.montant.message)}
+                </CCol>
+              </CFormGroup>
+              <CFormGroup row>
+                <CCol md="3">
+                  <CLabel htmlFor="select">Type Paiement</CLabel>
+                </CCol>
+                <CCol xs="12" md="9">
+                  <select className="col-md-12" {...register("TypePaiement")}>
+                    <option value="">Choisissez le Type du Paiement</option>
+                    <option value="liquide">Liquide</option>
+                    <option value="cheque">Cheque </option>
+                    <option value="carteBanquaire">Virement</option>
+                  </select>
+                </CCol>
+              </CFormGroup>
+              <CButton type="submit" size="sm" color="primary">
+                <CIcon name="cil-scrubber" /> Ajouter Forfait
+              </CButton>
+              <CButton size="sm" color="danger" onClick={() => setLarge(!large) }>
+                <CIcon name="cil-ban" /> Annuler
+              </CButton>
+            </CForm>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="secondary" onClick={() => setLarge(false)}>
+              Fermer
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </React.Fragment>
+    );
+  }
+};
 const ModalInscription = (props) => {
   const schema = yup.object().shape({
     activite: yup.string().required("L'activité choisie "),
@@ -1059,15 +1205,27 @@ const Clients = () => {
                       <ModalEdit client={item} showing={false}/>
                       <ModalAssurance client ={item} showing={false}/>
                       <ModalInscription client ={item} showing={false}/>
+                      <ModalForfait client={item} />
                       <ModalDelete
                         showing={false}
                         nom={item.nom}
                         onDelete={handleDelete}
                         id={item.id}
                       />
+
                       
                     </td>
                   ),
+                    'StatusP':
+                      (item)=>(
+                        <td>
+                          <CBadge color={getBadge(item.StatusP)}>
+                            {item.StatusP}
+                          </CBadge>
+                        </td>
+                      )
+    
+                  
                 }}
               />
             </CCardBody>
