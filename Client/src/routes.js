@@ -48,6 +48,8 @@ const Clients = React.lazy(() => import('./views/app/clients/Clients'));
 const Chevaux = React.lazy(() => import('./views/app/chevaux/Chevaux'));
 const Seance = React.lazy(() => import('./views/app/seance/Seance'));
 const Facturations = React.lazy(() => import('./views/app/Facturations/Facturations'));
+const Reclamations = React.lazy(() => import('./views/app/reclamations/reclamations'));
+
 
 
 
@@ -100,7 +102,8 @@ const routes = [
   { path: '/app/clients', name: 'Liste des clients', component: Clients },
   { path: '/app/chevaux', name: 'Liste des chevaux', component: Chevaux },
   { path: '/app/seance', name: 'Liste des séances', component: Seance  },
-  { path: '/app/facturations', name: 'Liste des facturations', component: Facturations}
+  { path: '/app/facturations', name: 'Liste des facturations', component: Facturations},
+  { path: '/app/reclamations', name: 'Liste des reclamations', component: Reclamations}
 ];
 
 export default routes;

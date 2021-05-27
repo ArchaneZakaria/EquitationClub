@@ -44,14 +44,14 @@ const _nav =  [
     icon: 'cil-task',
   },{
     _tag: 'CSidebarNavItem',
-    name: 'Facturations',
+    name: 'Paiements',
     to: '/App/Facturations',
     icon: 'cil-credit-card',
   },{
     _tag: 'CSidebarNavItem',
     name: 'Chevaux',
     to: '/App/Chevaux',
-    icon: <FontAwesomeIcon icon={faHorseHead} style={{marginRight:"22px"}}/>,
+    icon: <FontAwesomeIcon icon={faHorseHead} style={{marginRight:"19px",marginLeft:"7px"}}/>,
   },
   {
     _tag: 'CSidebarNavItem',

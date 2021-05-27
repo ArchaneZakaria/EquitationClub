@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CButton,
   CBadge,
@@ -27,7 +27,6 @@ import { DocsLink } from "src/reusable";
 import ClientData from "../clients/ClientData";
 import infoClient from "../clients/InfoClient";
 
-
 import ReactDOM from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -48,21 +47,21 @@ import {
 import clientData from "../clients/ClientData";
 const getBadge = (status) => {
   switch (status) {
-    case "Paid":
+    case "Payé":
       return "success";
-    case "Unpaid":
+    case "Non payé":
       return "danger";
     default:
       return "primary";
   }
 };
 const fields = [
-  { key: 'nom', _style: { width: '15%'} },
-  { key: 'prenom', _style: { width: '15'} },
+  { key: "nom", _style: { width: "15%" } },
+  { key: "prenom", _style: { width: "15" } },
   "DateNaissance",
-  "typeforfait",
-  "StatusP",
-  { key: 'options', _style: { width: '22%'} },
+  "typeForfait",
+  "statusPayement",
+  { key: "options", _style: { width: "22%" } },
 ];
 const fieldsInfo = [
   "datePremiereInscription",
@@ -93,19 +92,11 @@ const ModalDelete = (props) => {
       </CButton>
       <CModal show={modal} onClose={setModal}>
         <CModalHeader closeButton>
-          <CModalTitle>Modal title</CModalTitle>
+          <CModalTitle>Supprimer le client : </CModalTitle>
         </CModalHeader>
-        <CModalBody>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </CModalBody>
+        <CModalBody>Êtes-vous sur de vouloir supprimer le client .</CModalBody>
         <CModalFooter>
-          <CButton color="primary" onClick={deleting}>
+          <CButton color="danger" onClick={deleting}>
             DELETE
           </CButton>{" "}
           <CButton color="secondary" onClick={() => setModal(false)}>
@@ -119,17 +110,23 @@ const ModalDelete = (props) => {
 
 const ModalInfo = (props) => {
   const [modal, setModal] = React.useState(props.showing);
-  
-  const [datePremiereInscription,setdatePremiereInscription]=React.useState(props.client.datePremiereInscription)
-  const [nombreSeances,setnombreSeances]=React.useState(props.client.nombreSeances)
-  const [nombrePensions,setnombrePensions]=React.useState(props.client.nombrePensions)
-
-  const data=[{
-    "datePremiereInscription":datePremiereInscription,
-    "nombreSeances": nombreSeances,
-    "nombrePensions": nombrePensions,
-  }]
-  const table =["datePremiereInscription","nombreSeances","nombrePensions"]
+  const [datePremiereInscription, setdatePremiereInscription] = React.useState(
+    props.client.datePremiereInscription
+  );
+  const [nombreSeances, setnombreSeances] = React.useState(
+    props.client.nombreSeances
+  );
+  const [nombrePensions, setnombrePensions] = React.useState(
+    props.client.nombrePensions
+  );
+  const data = [
+    {
+      datePremiereInscription: datePremiereInscription,
+      nombreSeances: nombreSeances,
+      nombrePensions: nombrePensions,
+    },
+  ];
+  const table = ["datePremiereInscription", "nombreSeances", "nombrePensions"];
   return (
     <React.Fragment>
       <CButton
@@ -138,40 +135,35 @@ const ModalInfo = (props) => {
         color="secondary"
         className=""
         style={{ position: "relative", float: "left" }}
-        title="Plus d informations"
+        title="Plus d'informations"
         onClick={() => setModal(!modal)}
       >
         <FontAwesomeIcon size="sm" icon={faInfoCircle} />
       </CButton>
       <CModal show={modal} onClose={setModal}>
         <CModalHeader closeButton>
-          <CModalTitle >Informations générales</CModalTitle>
+          <CModalTitle>Informations générales</CModalTitle>
         </CModalHeader>
         <CModalBody>
-        <CRow>
-        <CCol>
-          <CCard>
-            <CCardHeader onClick={() => alert(JSON.stringify(data))} >
-              Information Générales :
-
-            </CCardHeader>
-            <CCardBody>
-            <CDataTable
-                tableFilter
-                clickableRows
-                items={data}
-                fields={fieldsInfo}
-                hover
-                striped
-                bordered
-                size="sm"
-                itemsPerPage={10}
-                pagination
-              />
-            </CCardBody>
-          </CCard>
-        </CCol>
-      </CRow>
+          <CRow>
+            <CCol>
+              <CCard>
+                <CCardBody>
+                  <CDataTable
+                    clickableRows
+                    items={data}
+                    fields={fieldsInfo}
+                    hover
+                    striped
+                    bordered
+                    size="sm"
+                    itemsPerPage={10}
+                    pagination
+                  />
+                </CCardBody>
+              </CCard>
+            </CCol>
+          </CRow>
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setModal(false)}>
@@ -185,7 +177,7 @@ const ModalInfo = (props) => {
 
 const ModalNewClient = (props) => {
   const schema = yup.object().shape({
-    nom: yup.string().required("Le nom est obligatoire"),
+    nom: yup.string().trim().required("Le nom est obligatoire"),
     prenom: yup.string().required("Le prenom est obligatoire"),
     CIN: yup.string().required("Le CIN est obligatoire"),
     email: yup
@@ -384,24 +376,6 @@ const ModalNewClient = (props) => {
             </CFormGroup>
             <CFormGroup row>
               <CCol md="3">
-                <CLabel htmlFor="select">StatusP</CLabel>
-              </CCol>
-              <CCol xs="12" md="9">
-                <select className="col-md-12" {...register("StatusP")}>
-                  <option value="" class="choice">
-                    Veuillez choisir un statut
-                  </option>
-                  <option value="paye" class="safe">
-                    Paid
-                  </option>
-                  <option value="non paye" class="danger">
-                    Unpaid{" "}
-                  </option>
-                </select>
-              </CCol>
-            </CFormGroup>
-            <CFormGroup row>
-              <CCol md="3">
                 <CLabel htmlFor="select2">Type du forfait</CLabel>
               </CCol>
               <CCol xs="12" md="9">
@@ -412,21 +386,26 @@ const ModalNewClient = (props) => {
                 </select>
               </CCol>
             </CFormGroup>
-            <CButton type="submit" size="sm" color="primary">
-              <CIcon name="cil-scrubber" /> Créer
-            </CButton>
-            <CButton type="reset" size="sm" color="danger">
+            <CButton
+              type="reset"
+              size="sm"
+              color="danger"
+              className="Boutton"
+              onClick={() => setLarge(false)}
+            >
               <CIcon name="cil-ban" />
               Annuler
             </CButton>
+            <CButton
+              type="submit"
+              size="sm"
+              className="Boutton"
+              color="primary"
+            >
+              <CIcon name="cil-scrubber" /> Ajouter client
+            </CButton>
           </CForm>
         </CModalBody>
-        <CModalFooter>
-          <CButton color="primary">{props.nom}</CButton>{" "}
-          <CButton color="secondary" onClick={() => setLarge(false)}>
-            Cancel
-          </CButton>
-        </CModalFooter>
       </CModal>
     </React.Fragment>
   );
@@ -448,8 +427,8 @@ const ModalEdit = (props) => {
     CIN: yup.string().required("Le CIN est obligatoire"),
     email: yup
       .string()
-      .email("L email est incorrect")
-      .required("L email est obligatoire"),
+      .email("L'email est incorrect")
+      .required("L'email est obligatoire"),
     password: yup
       .string()
       .min(4, "Le mot de passe doit contenir au moins 4 caractéres")
@@ -697,19 +676,24 @@ const ModalEdit = (props) => {
                   </select>
                 </CCol>
               </CFormGroup>
-              <CButton type="submit" size="sm" color="primary">
-                <CIcon name="cil-scrubber" /> Créer
-              </CButton>
-              <CButton type="reset" size="sm" color="danger">
+              <CButton
+                size="sm"
+                color="danger"
+                onClick={() => setLarge(false)}
+                className="Boutton"
+              >
                 <CIcon name="cil-ban" /> Annuler
+              </CButton>
+              <CButton
+                type="submit"
+                size="sm"
+                color="primary"
+                className="Boutton"
+              >
+                <CIcon name="cil-scrubber" /> Créer
               </CButton>
             </CForm>
           </CModalBody>
-          <CModalFooter>
-            <CButton color="secondary" onClick={() => setLarge(false)}>
-              Fermer
-            </CButton>
-          </CModalFooter>
         </CModal>
       </React.Fragment>
     );
@@ -833,7 +817,7 @@ const ModalAssurance = (props) => {
               </CFormGroup>
               <CFormGroup row>
                 <CCol md="3">
-                  <CLabel htmlFor="montant-input">montant</CLabel>
+                  <CLabel htmlFor="montant-input">Montant</CLabel>
                 </CCol>
                 <CCol xs="12" md="9">
                   <input
@@ -859,19 +843,24 @@ const ModalAssurance = (props) => {
                   </select>
                 </CCol>
               </CFormGroup>
-              <CButton type="submit" size="sm" color="primary">
-                <CIcon name="cil-scrubber" /> Ajouter Assurance
-              </CButton>
-              <CButton type="reset" size="sm" color="danger">
+              <CButton
+                size="sm"
+                color="danger"
+                className="Boutton"
+                onClick={() => setLarge(false)}
+              >
                 <CIcon name="cil-ban" /> Annuler
+              </CButton>
+              <CButton
+                type="submit"
+                size="sm"
+                color="primary"
+                className="Boutton"
+              >
+                <CIcon name="cil-scrubber" /> Ajouter Assurance
               </CButton>
             </CForm>
           </CModalBody>
-          <CModalFooter>
-            <CButton color="secondary" onClick={() => setLarge(false)}>
-              Fermer
-            </CButton>
-          </CModalFooter>
         </CModal>
       </React.Fragment>
     );
@@ -880,29 +869,19 @@ const ModalAssurance = (props) => {
 const ModalForfait = (props) => {
   const [typeForfait, setTypeForfait] = React.useState("");
   const [dateDebut, setDateDebut] = React.useState("");
-  const [dateFin, setDateFin] = React.useState("");
-  const [montant, setMontant] = React.useState("");
   const [typePaiement, setTypePaiement] = React.useState("");
   const [nombreSeances, setnombreSeances] = React.useState("");
-
 
   const schema = yup.object().shape({
     typeForfait: yup.number(),
     dateDebut: yup.date(),
     dateFin: yup.date(),
-    nombreSeances: yup
-      .number()
-      .min(0, "Le nombre doit etre supérieur à zero."),
-      
-    montant: yup
-      .number()
-      .min(0, "Le montant doit etre supérieur à zero."),
-    typePaiement: yup.string()
+    nombreSeances: yup.number().min(0, "Le nombre doit etre supérieur à zero."),
   });
   const defaults = {
     dateDebut: props.client.dateDebut,
     prenom: props.client.prenom,
-    montant: props.client.montant,
+    nombreHeures: props.client.nombreHeures,
   };
   const { register, handleSubmit, errors, formState } = useForm({
     resolver: yupResolver(schema),
@@ -950,15 +929,13 @@ const ModalForfait = (props) => {
             >
               <CFormGroup row>
                 <CCol md="3">
-                  <CLabel htmlFor="typeForfait-input">
-                    Type forfait
-                  </CLabel>
+                  <CLabel htmlFor="typeForfait-input">Type forfait</CLabel>
                 </CCol>
                 <CCol xs="12" md="9">
-                <select className="col-md-12" {...register("TypeForfait")}>
+                  <select className="col-md-12" {...register("TypeForfait")}>
                     <option value="">Choisissez le type du forfait</option>
                     <option value="mensuel">Mensuel</option>
-                    <option value="trimestriel">trimestriel </option>
+                    <option value="trimestriel">Trimestriel </option>
                   </select>
                   {formState.errors.typeForfait &&
                     errorMessage(formState.errors.typeForfait.message)}
@@ -981,45 +958,39 @@ const ModalForfait = (props) => {
               </CFormGroup>
               <CFormGroup row>
                 <CCol md="3">
-                  <CLabel htmlFor="montant-input">montant</CLabel>
+                  <CLabel htmlFor="nombreSeances-input">
+                    Nombre de seances
+                  </CLabel>
                 </CCol>
                 <CCol xs="12" md="9">
                   <input
                     className="col-md-12"
                     type="text"
                     placeholder="300"
-                    {...register("montant")}
+                    {...register("nombreSeances")}
                   />
-                  {formState.errors.montant &&
-                    errorMessage(formState.errors.montant.message)}
+                  {formState.errors.nombreSeances &&
+                    errorMessage(formState.errors.nombreSeances.message)}
                 </CCol>
               </CFormGroup>
-              <CFormGroup row>
-                <CCol md="3">
-                  <CLabel htmlFor="select">Type Paiement</CLabel>
-                </CCol>
-                <CCol xs="12" md="9">
-                  <select className="col-md-12" {...register("TypePaiement")}>
-                    <option value="">Choisissez le Type du Paiement</option>
-                    <option value="liquide">Liquide</option>
-                    <option value="cheque">Cheque </option>
-                    <option value="carteBanquaire">Virement</option>
-                  </select>
-                </CCol>
-              </CFormGroup>
-              <CButton type="submit" size="sm" color="primary">
-                <CIcon name="cil-scrubber" /> Ajouter Forfait
-              </CButton>
-              <CButton size="sm" color="danger" onClick={() => setLarge(!large) }>
+              <CButton
+                size="sm"
+                color="danger"
+                className="Boutton"
+                onClick={() => setLarge(!large)}
+              >
                 <CIcon name="cil-ban" /> Annuler
+              </CButton>
+              <CButton
+                type="submit"
+                size="sm"
+                color="primary"
+                className="Boutton"
+              >
+                <CIcon name="cil-scrubber" /> Ajouter Forfait
               </CButton>
             </CForm>
           </CModalBody>
-          <CModalFooter>
-            <CButton color="secondary" onClick={() => setLarge(false)}>
-              Fermer
-            </CButton>
-          </CModalFooter>
         </CModal>
       </React.Fragment>
     );
@@ -1027,15 +998,10 @@ const ModalForfait = (props) => {
 };
 const ModalInscription = (props) => {
   const schema = yup.object().shape({
-    activite: yup.string().required("L'activité choisie "),
     dateInscription: yup
       .date()
       .required("La date d'inscription est obligatoire"),
-    dateFinInscription: yup.date().required("La date fin est obligatoire"),
-    nombreHeuresSemaine: yup
-      .number()
-      .min(0, "Le nombre d'heures doit etre supperieur a zero")
-      .required("Le montant est obligatoire"),
+    dateFinInscription: yup.date().required("La date de fin est obligatoire"),
   });
   const defaults = {
     nom: props.client.nom,
@@ -1088,21 +1054,6 @@ const ModalInscription = (props) => {
             >
               <CFormGroup row>
                 <CCol md="3">
-                  <CLabel htmlFor="activite-input">Activité</CLabel>
-                </CCol>
-                <CCol xs="12" md="9">
-                  <input
-                    className="col-md-12"
-                    type="text"
-                    placeholder="Veuillez saisir le nom de l'activité choisi"
-                    {...register("societeAssurance")}
-                  />
-                  {formState.errors.activite &&
-                    errorMessage(formState.errors.activite.message)}
-                </CCol>
-              </CFormGroup>
-              <CFormGroup row>
-                <CCol md="3">
                   <CLabel htmlFor="dateInscription-input">Date de Debut</CLabel>
                 </CCol>
                 <CCol xs="12" md="9">
@@ -1119,7 +1070,7 @@ const ModalInscription = (props) => {
               <CFormGroup row>
                 <CCol md="3">
                   <CLabel htmlFor="dateFinInscription-input">
-                    Date de Fin
+                    Date de fin de validité
                   </CLabel>
                 </CCol>
                 <CCol xs="12" md="9">
@@ -1133,37 +1084,24 @@ const ModalInscription = (props) => {
                     errorMessage(formState.errors.dateFinInscription.message)}
                 </CCol>
               </CFormGroup>
-              <CFormGroup row>
-                <CCol md="3">
-                  <CLabel htmlFor="montant-input">
-                    Nombre Heures par Semaine
-                  </CLabel>
-                </CCol>
-                <CCol xs="12" md="9">
-                  <input
-                    className="col-md-12"
-                    type="text"
-                    placeholder="Veuillez saisir le nombre d'heures"
-                    {...register("nombreHeureSemaine")}
-                  />
-                  {formState.errors.nombreHeureSemaine &&
-                    errorMessage(formState.errors.nombreHeureSemaine.message)}
-                </CCol>
-              </CFormGroup>
-              <CButton type="submit" size="sm" color="primary">
-                <CIcon name="cil-scrubber" /> Ajouter Inscription
-              </CButton>
-              <CButton type="reset" size="sm" color="danger">
+              <CButton
+                size="sm"
+                color="danger"
+                className="Boutton"
+                onClick={() => setLarge(false)}
+              >
                 <CIcon name="cil-ban" /> Annuler
+              </CButton>
+              <CButton
+                type="submit"
+                size="sm"
+                color="primary"
+                className="Boutton"
+              >
+                <CIcon name="cil-scrubber" /> Ajouter Inscription
               </CButton>
             </CForm>
           </CModalBody>
-          <CModalFooter>
-            <CButton color="primary">Ajouter</CButton>{" "}
-            <CButton color="secondary" onClick={() => setLarge(false)}>
-              Cancel
-            </CButton>
-          </CModalFooter>
         </CModal>
       </React.Fragment>
     );
@@ -1180,7 +1118,7 @@ const Clients = () => {
 
   return (
     <>
-      <CRow >
+      <CRow>
         <CCol>
           <CCard>
             <CCardHeader>Liste des clients</CCardHeader>
@@ -1200,11 +1138,10 @@ const Clients = () => {
                 scopedSlots={{
                   options: (item) => (
                     <td>
-
                       <ModalInfo client={item} />
-                      <ModalEdit client={item} showing={false}/>
-                      <ModalAssurance client ={item} showing={false}/>
-                      <ModalInscription client ={item} showing={false}/>
+                      <ModalEdit client={item} showing={false} />
+                      <ModalAssurance client={item} showing={false} />
+                      <ModalInscription client={item} showing={false} />
                       <ModalForfait client={item} />
                       <ModalDelete
                         showing={false}
@@ -1212,20 +1149,15 @@ const Clients = () => {
                         onDelete={handleDelete}
                         id={item.id}
                       />
-
-                      
                     </td>
                   ),
-                    'StatusP':
-                      (item)=>(
-                        <td>
-                          <CBadge color={getBadge(item.StatusP)}>
-                            {item.StatusP}
-                          </CBadge>
-                        </td>
-                      )
-    
-                  
+                  statusPayement: (item) => (
+                    <td>
+                      <CBadge color={getBadge(item.statusPayement)}>
+                        {item.statusPayement}
+                      </CBadge>
+                    </td>
+                  ),
                 }}
               />
             </CCardBody>
