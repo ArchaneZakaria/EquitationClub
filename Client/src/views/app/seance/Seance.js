@@ -2,6 +2,8 @@ import React, { Fragment, useState }  from 'react'
 import * as ReactDOM from 'react-dom';
 import { L10n,setCulture} from '@syncfusion/ej2-base';
 import {Inject,ScheduleComponent,Day,Week,WorkWeek,Month,Agenda,ResourcesDirective, ResourceDirective,EventSettingsModel} from '@syncfusion/ej2-react-schedule'
+import { DropDownList } from '@syncfusion/ej2-dropdowns';
+import { extend, createElement } from '@syncfusion/ej2-base';
 import { useForm } from "react-hook-form";
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -51,6 +53,7 @@ const ModalNewSeance=(props)=>{
           return <CFormText color="danger">{error}</CFormText>
         };
 
+      
         const onSubmit = (data) => {
           if(data){
             const newLine={
@@ -230,20 +233,25 @@ const Data=[{
   EndTime:  new Date('May 22, 2021 10:30:00'),
   IsAllDay: false,
   Status: 'Completed',
-  Priority: 'High'
+  Priority: 'High',
+  RecurrenceRule: 'FREQ=WEEKLY;INTERVAL=1;COUNT=5',
 },
 {
   Id: 4,
-  Subject: 'Palfrenage',
+  Titre: 'Palfrenage',
   Description: 'Meeting to discuss support plan.',
-  StartTime:  new Date('May 24, 2021 08:30:00'),
-  EndTime:  new Date('May 24, 2021 10:30:00'),
+  StartTime:  new Date('May 28, 2021 08:30:00'),
+  EndTime:  new Date('May 28, 2021 10:30:00'),
   IsAllDay: false,
   Status: 'Completed',
   Priority: 'High',
-  CategoryColor: "#fec200",
-  priorite:1
+  RecurrenceRule: 'FREQ=DAILY;INTERVAL=1;COUNT=5',
+  Clients:'ARCHANE Zakaria'
 }];
+//// Les récurrences :  https://www.telerik.com/kendo-react-ui/components/scheduler/recurring/
+
+
+
 //Le composant principal
 L10n.load({
   "en": {
@@ -270,16 +278,16 @@ L10n.load({
           "deleteEvent": "Supprimer séance",
           "deleteMultipleEvent": "Delete Multiple Events",
           "selectedItems": "Items selected",
-          "deleteSeries": "Delete Series",
+          "deleteSeries": "Supprimer le forfait",
           "edit": "Edit",
-          "editSeries": "Edit Series",
+          "editSeries": "Modifier le forfait",
           "editEvent": "Modifier la séance",
           "createEvent": "Créer",
           "subject": "Sujet",
           "addTitle": "Ajouter titre",
           "moreDetails": "Plus de détails",
           "save": "Enregistrer",
-          "editContent": "Do you want to edit only this event or entire series?",
+          "editContent": "Voulez vous supprimez tous les séances du forfait ?",
           "deleteRecurrenceContent": "Do you want to delete only this event or entire series?",
           "deleteContent": "Vous étes sur de vouloir supprimer cette séance?",
           "deleteMultipleContent": "Are you sure you want to delete the selected events?",
@@ -287,7 +295,7 @@ L10n.load({
           "title": "Titre",
           "location": "Lieu",
           "description": "Description",
-          "timezone": "Timezone",
+          "timezone": "Fuseau horaire",
           "startTimezone": "Start Timezone",
           "endTimezone": "End Timezone",
           "repeat": "Répeter",
@@ -354,6 +362,9 @@ L10n.load({
   }
   });
   setCulture('en');
+
+
+
 class Seance extends React.Component{
   constructor() {
     super(...arguments);
@@ -365,8 +376,47 @@ class Seance extends React.Component{
       { priorite: 'Forte', id: 1, color: '#ea7a57'},
       { priorite: 'Moyenne', id: 2, color: '#7fa900'},
       { priorite: 'Faible', id: 3, color: '#5978ee'}
-    ]
+    ];
+    this.clientsData = [
+      { nomClient: 'ARCHANE Zakaria', idClient: 1, color: '#1aaa55' },
+      { nomClient: 'LAHYANE Mehdi', idClient: 2, color: '#7fa900' },
+      { nomClient: 'BELATAR Jamal', idClient: 3, color: '#7fa902' },
+      { nomClient: 'ZAYTI Hamid', idClient: 4, color: '#77a900' },
+      { nomClient: 'KOLOBAN Jaban', idClient: 5, color: '#7fa900' }
+  ];
 }
+onEventClick(args){
+          let event = this.scheduleObj.getEventDetails(args.element);
+          alert(JSON.stringify(event));
+      };
+
+onPopupOpen(args) {
+  if (args.type === 'Editor') {
+      if (!args.element.querySelector('.custom-field-row')) {
+          let row = createElement('div', { className: 'custom-field-row' });
+          let formElement = args.element.querySelector('.e-schedule-form');
+          formElement.firstChild.insertBefore(row, formElement.firstChild.firstChild);
+          let container = createElement('div', { className: 'custom-field-container' });
+          let inputEle = createElement('input', {
+              className: 'e-field', attrs: { name: 'EventType' }
+          });
+          container.appendChild(inputEle);
+          row.appendChild(container);
+          let drowDownList = new DropDownList({
+              dataSource: [
+                  { text: 'Séance d\'entrainement', value: 'public-event' },
+                  { text: 'Balade', value: 'maintenance' },
+                  { text: 'Saut d\'obstacle', value: 'commercial-event' },
+                  { text: 'Family Event', value: 'family-event' }
+              ],
+              fields: { text: 'text', value: 'value' },
+              value: args.data.EventType,
+              floatLabelType: 'Always', placeholder: 'Type de l\'événement'
+          });
+          drowDownList.appendTo(inputEle);
+          inputEle.setAttribute('name', 'EventType');
+      }
+  }}
 
 
 onAddClick(row) {
@@ -384,20 +434,35 @@ render(){
             </CCardHeader>
             <CCardBody>
             <ModalNewSeance showing={this.state.show} sum={this.onAddClick.bind(this)}/>
-                <ScheduleComponent ref={t => this.scheduleObj = t}  eventSettings={{dataSource:this.data,fields: {
-                id: 'Id',
-                subject: { name: 'Titre', title: 'Titre' },
-                location: { name: 'Lieu', title: 'Lieu' },
-                description: { name: 'Description', title: 'Description de la séance' },
-                startTime: { name: 'StartTime', title: 'Date de ébut' },
-                endTime: { name: 'EndTime', title: 'Date de fin' }
-            }}} firstDayOfWeek={1} startHour={'08:00'} endHour={'19:00'}   readonly={false} timezone={'FR'} 
-                showHeaderBar={true} timeScale={{ interval: 60, slotCount: 1 }} group={{ enableCompactView: false }}>
+                <ScheduleComponent ref={t => this.scheduleObj = t}  eventSettings={{dataSource:this.data,
+                enableTooltip: true ,
+            fields: {
+              id: 'Id',
+              subject: { name: 'Titre' },
+              isAllDay: { name: 'IsAllDay' },
+              startTime: { name: 'StartTime' },
+              endTime: { name: 'EndTime' }
+          }
+}}
+eventClick={this.onEventClick.bind(this)} 
+firstDayOfWeek={1} 
+                startHour={'08:00'} endHour={'19:00'}   
+                readonly={false} timezone={'FR'} 
+                showHeaderBar={true} 
+                timeScale={{ interval: 60, slotCount: 1 }} 
+                group={{ enableCompactView: false }}
+                popupOpen={this.onPopupOpen.bind(this)}>
+
+
                             <ResourcesDirective>
-                                    <ResourceDirective field='priorite' title='Priorite Type' name='MeetingRoom' allowMultiple={true} 
-                                    dataSource={this.prioriteData} textField='priorite' idField='id' colorField='color'>
-                            </ResourceDirective>
+                                    
+                      <ResourceDirective field='Clients' title='Clients' name='Clients' allowMultiple={true} 
+                                        dataSource={this.clientsData} textField='nomClient' idField='idClient' colorField='color'>
+                    </ResourceDirective>
                             </ResourcesDirective>
+                            
+                            
+                            
                     <Inject services={[Day,Week,Month,Agenda]}></Inject>
                 </ScheduleComponent>
             
@@ -410,46 +475,6 @@ render(){
 }
 
 
-const Seancwwe=(props)=>{
-  const [data,setData]=React.useState(Data)
-  const prioriteData=[
-    { priorite: 'Forte', id: 1, color: '#ea7a57'},
-    { priorite: 'Moyenne', id: 2, color: '#7fa900'},
-    { priorite: 'Faible', id: 3, color: '#5978ee'}
-];
-  const sas=(row)=>{
- {
-   /*   this.scheduleObj.addEvent(row);*/} 
-    setData(data.push(row))
-    
-  }
 
-  
-return(
-    <CRow >
-        <CCol>
-          <CCard>
-            <CCardHeader>
-              Liste des séances
-            </CCardHeader>
-            <CCardBody style={{backgroundColor:"#051612"}}>
-            <ModalNewSeance showing={false} sum={sas}/>
-            <CButton color="primary" onClick={() => {} }ref={t => this.buttonObj = t} onClick={this.onAddClick.bind(this)} className="mr-1">Nouvelle séance</CButton>
-                <ScheduleComponent ref={t => this.scheduleObj = t}  eventSettings={{dataSource:Data}} firstDayOfWeek={1} startHour={'08:00'} endHour={'19:00'} readonly={false} timezone={'MA'} 
-                showHeaderBar={true} timeScale={{ interval: 60, slotCount: 1 }} group={{ enableCompactView: false }}>
-                            <ResourcesDirective>
-                                    <ResourceDirective field='priorite' title='Priorite Type' name='MeetingRoom' allowMultiple={true} 
-                                    dataSource={prioriteData} textField='priorite' idField='id' colorField='color'>
-                            </ResourceDirective>
-                            </ResourcesDirective>
-                    <Inject services={[Day,Week,WorkWeek,Month,Agenda]}></Inject>
-                </ScheduleComponent>
-            
-            </CCardBody>
-          </CCard>
-        </CCol>
-      </CRow>
-)
-}
 
 export default Seance
