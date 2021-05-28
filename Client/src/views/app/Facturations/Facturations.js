@@ -33,7 +33,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 
-import { faBookMedical, faDollarSign } from "@fortawesome/free-solid-svg-icons";
+import { faBookMedical, faCashRegister, faDollarSign } from "@fortawesome/free-solid-svg-icons";
 import {
   factDataInscription,
   factDataAssurance,
@@ -126,7 +126,7 @@ const ModalPayement = (props) => {
           style={{ position: "relative", float: "left" }}
           onClick={() => setLarge(!large)}
         >
-          <FontAwesomeIcon size="sm" icon={faDollarSign} />
+          <FontAwesomeIcon size="sm" icon={faCashRegister} />
         </CButton>
         <CModal show={large} onClose={setLarge} size="lg">
           <CModalHeader closeButton>

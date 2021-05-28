@@ -26,10 +26,17 @@ import CIcon from "@coreui/icons-react";
 import { DocsLink } from "src/reusable";
 
 import chevauxData from "../chevaux/ChevauxData";
+import clientData from "../clients/ClientData"
 
 import ReactDOM from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHistory, faEllipsisH,faEdit,faInfoCircle,faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import {
+  faHistory,
+  faEllipsisH,
+  faEdit,
+  faInfoCircle,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 const getBadge = (status) => {
   switch (status) {
@@ -63,16 +70,24 @@ const ModalDelete = (props) => {
   const [modal, setModal] = React.useState(props.showing);
   return (
     <React.Fragment>
-      <CButton size="sm" shape="pill" color="danger" className=""  title="Supprimer" style={{position: "relative",float:"left"}}  onClick={()=>{setModal(!modal)}}>
-                    <FontAwesomeIcon  size="sm" icon={faTrashAlt}/>
-                    </CButton>
+      <CButton
+        size="sm"
+        shape="pill"
+        color="danger"
+        className=""
+        title="Supprimer"
+        style={{ position: "relative", float: "left" }}
+        onClick={() => {
+          setModal(!modal);
+        }}
+      >
+        <FontAwesomeIcon size="sm" icon={faTrashAlt} />
+      </CButton>
       <CModal show={modal} onClose={setModal}>
         <CModalHeader closeButton>
           <CModalTitle>Confirmation</CModalTitle>
         </CModalHeader>
-        <CModalBody>
-        Etes-vous sur vous voulez supprimer ?
-        </CModalBody>
+        <CModalBody>Etes-vous sur vous voulez supprimer ?</CModalBody>
         <CModalFooter>
           <CButton color="primary" onClick={deleting}>
             DELETE
@@ -90,9 +105,19 @@ const ModalInfo = (props) => {
   const [modal, setModal] = React.useState(props.showing);
   return (
     <React.Fragment>
-      <CButton size="sm" shape="pill" color="secondary" className=""  title="Supprimer" style={{position: "relative",float:"left"}}  onClick={()=>{setModal(!modal)}}>
-        <FontAwesomeIcon  size="sm" icon={faInfoCircle}/>
-        </CButton>
+      <CButton
+        size="sm"
+        shape="pill"
+        color="secondary"
+        className=""
+        title="Supprimer"
+        style={{ position: "relative", float: "left" }}
+        onClick={() => {
+          setModal(!modal);
+        }}
+      >
+        <FontAwesomeIcon size="sm" icon={faInfoCircle} />
+      </CButton>
       <CModal show={modal} onClose={setModal}>
         <CModalHeader closeButton>
           <CModalTitle>Modal title</CModalTitle>
@@ -117,15 +142,19 @@ const ModalInfo = (props) => {
   );
 };
 
-const ModalNewPersonnel = (props) => {
+const ModalNewCheval = (props) => {
   const schema = yup.object().shape({
     nom: yup.string().required("Le nom est obligatoire"),
-    DateNaissance: yup.date().required("La date de Naissance est obligatoire"),
-    DateAcces: yup.date().required("La Date est obligatoire"),
-    Paddock: yup.string(),
-    Race: yup.string().required("La Race est obligatoire"),
-    EtatDeSante: yup.string().required("Etat de santé obligatoire"),
-    Status: yup.string().required("Disponible ou non"),
+    dateDeNaissance: yup
+      .date()
+      .required("La date de Naissance est obligatoire"),
+    dateAcces: yup.date().required("La Date est obligatoire"),
+    paddock: yup.string(),
+    race: yup.string().required("La Race est obligatoire"),
+    etatDeSante: yup.string().required("Etat de santé obligatoire"),
+    status: yup.string().required("Disponible ou non"),
+    clientCheval: yup.string().required("Disponible ou non"),
+
   });
 
   const { register, handleSubmit, errors, formState } = useForm({
@@ -187,36 +216,34 @@ const ModalNewPersonnel = (props) => {
                   className="col-md-12"
                   type="text"
                   placeholder="Veuillez saisir le Race"
-                  {...register("Race")}
+                  {...register("race")}
                 />
-                {formState.errors.Race &&
+                {formState.errors.race &&
                   errorMessage(formState.errors.Race.message)}
               </CCol>
             </CFormGroup>
             <CFormGroup row>
               <CCol md="3">
-                <CLabel htmlFor="DateNaissance-input">
-                  Date de naissance
-                </CLabel>
+                <CLabel htmlFor="dateNaissance-input">Date de naissance</CLabel>
               </CCol>
               <CCol xs="12" md="9">
                 <input
                   className="col-md-12"
                   type="date"
-                  {...register("DateNaissance")}
+                  {...register("dateDeNaissance")}
                 />
               </CCol>
             </CFormGroup>
             <CFormGroup row>
               <CCol md="3">
-                <CLabel htmlFor="DateAcces-input">Date d'accés</CLabel>
+                <CLabel htmlFor="dateAcces-input">Date d'accés</CLabel>
               </CCol>
               <CCol xs="12" md="9">
                 <input
                   className="col-md-12"
                   type="date"
                   placeholder="Veuillez La date d'acces du cheval"
-                  {...register("DateAcces")}
+                  {...register("dateAcces")}
                 />
                 {formState.errors.DateAcces &&
                   formState.errors.DateAcces.type === "required" &&
@@ -225,14 +252,14 @@ const ModalNewPersonnel = (props) => {
             </CFormGroup>
             <CFormGroup row>
               <CCol md="3">
-                <CLabel htmlFor="Paddock-input">Numéro Paddock</CLabel>
+                <CLabel htmlFor="paddock-input">Numéro Paddock</CLabel>
               </CCol>
               <CCol xs="12" md="9">
                 <input
                   className="col-md-12"
                   type="number"
                   placeholder="Veuillez saisir le numéro du Paddock"
-                  {...register("Paddock")}
+                  {...register("paddock")}
                 />
                 {formState.errors.Paddock &&
                   errorMessage(formState.errors.Paddock.message)}
@@ -240,14 +267,14 @@ const ModalNewPersonnel = (props) => {
             </CFormGroup>
             <CFormGroup row>
               <CCol md="3">
-                <CLabel htmlFor="EtatDeSante-input">Etat de Santé</CLabel>
+                <CLabel htmlFor="etatDeSante-input">Etat de Santé</CLabel>
               </CCol>
               <CCol xs="12" md="9">
                 <input
                   className="col-md-12"
                   type="text"
                   placeholder="Veuillez saisir l'etat du cheval "
-                  {...register("EtatDeSante")}
+                  {...register("etatDeSante")}
                 />
                 {formState.errors.fonction &&
                   errorMessage(formState.errors.fonction.message)}
@@ -258,27 +285,48 @@ const ModalNewPersonnel = (props) => {
                 <CLabel htmlFor="select">Status</CLabel>
               </CCol>
               <CCol xs="12" md="9">
-                <select className="col-md-12" {...register("role")}>
+                <select className="col-md-12" {...register("status")}>
                   <option value="">Please select</option>
                   <option value="disponible">Disponible</option>
-                  <option value="disponible">Indisponible </option>
+                  <option value="indisponible">Indisponible </option>
                 </select>
               </CCol>
             </CFormGroup>
-            <CButton type="submit" size="sm" color="primary">
-              <CIcon name="cil-scrubber" /> Créer
-            </CButton>
-            <CButton type="reset" size="sm" color="danger">
+            <CFormGroup row>
+              <CCol md="3">
+                <CLabel htmlFor="select">Status</CLabel>
+              </CCol>
+              <CCol xs="12" md="9">
+                <select className="col-md-12" {...register("clientCheval")}>
+                  <option value="Choisissez le client">
+                    Choisissez un Client
+                  </option>
+                  {clientData.map((item) => (
+                    <option value={item.nom}>
+                      {item.nom + " " + item.prenom}
+                    </option>
+                  ))}
+                </select>
+              </CCol>
+            </CFormGroup>
+            <CButton
+              onClick={() => setLarge(false)}
+              size="sm"
+              color="danger"
+              className="Boutton"
+            >
               <CIcon name="cil-ban" /> Annuler
+            </CButton>
+            <CButton
+              type="submit"
+              size="sm"
+              color="primary"
+              className="Boutton"
+            >
+              <CIcon name="cil-scrubber" /> Créer
             </CButton>
           </CForm>
         </CModalBody>
-        <CModalFooter>
-          <CButton color="primary">{props.nom}</CButton>{" "}
-          <CButton color="secondary" onClick={() => setLarge(false)}>
-            Cancel
-          </CButton>
-        </CModalFooter>
       </CModal>
     </React.Fragment>
   );
@@ -298,7 +346,7 @@ const Chevaux = () => {
           <CCard>
             <CCardHeader>Liste des chevaux</CCardHeader>
             <CCardBody>
-              <ModalNewPersonnel showing={false} />
+              <ModalNewCheval showing={false} />
               <CDataTable
                 tableFilter
                 clickableRows
@@ -314,7 +362,12 @@ const Chevaux = () => {
                   Options: (item) => (
                     <td>
                       <ModalInfo showing={false} nom={item.nom} />
-                      <ModalDelete showing={false} nom={item.nom} onDelete={handleDelete} id={item.id} />
+                      <ModalDelete
+                        showing={false}
+                        nom={item.nom}
+                        onDelete={handleDelete}
+                        id={item.id}
+                      />
                     </td>
                   ),
                 }}

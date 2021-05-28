@@ -59,14 +59,13 @@ const fields = [
   { key: "nom", _style: { width: "15%" } },
   { key: "prenom", _style: { width: "15" } },
   "DateNaissance",
-  "typeForfait",
   "statusPayement",
   { key: "options", _style: { width: "22%" } },
 ];
 const fieldsInfo = [
   "datePremiereInscription",
   "nombreSeances",
-  "nombrePensions",
+  "nombreChevaux",
 ];
 
 const ModalDelete = (props) => {
@@ -116,17 +115,17 @@ const ModalInfo = (props) => {
   const [nombreSeances, setnombreSeances] = React.useState(
     props.client.nombreSeances
   );
-  const [nombrePensions, setnombrePensions] = React.useState(
-    props.client.nombrePensions
+  const [nombreChevaux, setnombreChevaux] = React.useState(
+    props.client.nombreChevaux
   );
   const data = [
     {
       datePremiereInscription: datePremiereInscription,
       nombreSeances: nombreSeances,
-      nombrePensions: nombrePensions,
+      nombreChevaux: nombreChevaux,
     },
   ];
-  const table = ["datePremiereInscription", "nombreSeances", "nombrePensions"];
+  const table = ["datePremiereInscription", "nombreSeances", "nombreChevaux"];
   return (
     <React.Fragment>
       <CButton
@@ -196,8 +195,6 @@ const ModalNewClient = (props) => {
         "Les mots de passe ne correspondent pas !"
       ),
     telephone: yup.number().required("Le numéro de telephone est obligatoire"),
-    TypeForfait: yup.string().required("Le type du forfait est obligatoire"),
-    StatusPayement: yup.string().required("Status est obligatoire"),
     adresse: yup.string().required("L'adresse est obligatoire"),
   });
 
@@ -212,8 +209,7 @@ const ModalNewClient = (props) => {
   };
 
   const onSubmit = (data) => {
-    console.log(data);
-    alert(JSON.stringify(data));
+    alert(JSON.stringify(data))
   };
   return (
     <React.Fragment>
@@ -374,18 +370,6 @@ const ModalNewClient = (props) => {
                 />
               </CCol>
             </CFormGroup>
-            <CFormGroup row>
-              <CCol md="3">
-                <CLabel htmlFor="select2">Type du forfait</CLabel>
-              </CCol>
-              <CCol xs="12" md="9">
-                <select className="col-md-12" {...register("TypeForfait")}>
-                  <option value="">Choisissez Type Forfait</option>
-                  <option value="Mensuel">Mensuel</option>
-                  <option value="Trimestriel">Trimestriel </option>
-                </select>
-              </CCol>
-            </CFormGroup>
             <CButton
               type="reset"
               size="sm"
@@ -417,10 +401,9 @@ const ModalEdit = (props) => {
   const [CIN, setCIN] = React.useState("");
   const [email, setEmail] = React.useState(props.client.email);
   const [dateNaissance, setDateNaissance] = React.useState("");
-  const [TypeForfait, setTypeForfait] = React.useState("");
   const [tele, setTele] = React.useState("");
   const [adresse, setAdresse] = React.useState("");
-  const [StatusPayement, setStatusPayement] = React.useState("");
+  const [statusPayement, setStatusPayement] = React.useState("");
   const schema = yup.object().shape({
     nom: yup.string().required("Le nom est obligatoire"),
     prenom: yup.string().required("Le prenom est obligatoire"),
@@ -441,8 +424,7 @@ const ModalEdit = (props) => {
         "Les mots de passe ne correspondent pas !"
       ),
     telephone: yup.number().required("Le numéro de telephone est obligatoire"),
-    TypeForfait: yup.string().required("Le type du forfait est obligatoire"),
-    StatusPayement: yup.string().required("Status est obligatoire"),
+    statusPayement: yup.string().required("Status est obligatoire"),
     adresse: yup.string().required("L'adresse est obligatoire"),
   });
   const defaults = {
@@ -658,24 +640,7 @@ const ModalEdit = (props) => {
                   />
                 </CCol>
               </CFormGroup>
-              <CFormGroup row>
-                <CCol md="3">
-                  <CLabel htmlFor="select">Type Forfait</CLabel>
-                </CCol>
-                <CCol xs="12" md="9">
-                  <select
-                    className="col-md-12"
-                    {...register("TypeForfait")}
-                    onChange={(e) => {
-                      setTypeForfait(e.target.value);
-                    }}
-                  >
-                    <option value="">Choisissez le Type du Forfait</option>
-                    <option value="mensuel">Mensuel</option>
-                    <option value="trimestriel">Trimestriel </option>
-                  </select>
-                </CCol>
-              </CFormGroup>
+              
               <CButton
                 size="sm"
                 color="danger"
@@ -720,9 +685,8 @@ const ModalAssurance = (props) => {
     typePaiement: yup.string().required("Liquide/Cheque/CarteBanquaire"),
   });
   const defaults = {
-    dateDebut: props.client.nom,
+    nom: props.client.nom,
     prenom: props.client.prenom,
-    montant: props.client.montant,
   };
   const { register, handleSubmit, errors, formState } = useForm({
     resolver: yupResolver(schema),
@@ -835,8 +799,8 @@ const ModalAssurance = (props) => {
                   <CLabel htmlFor="select">Type Paiement</CLabel>
                 </CCol>
                 <CCol xs="12" md="9">
-                  <select className="col-md-12" {...register("TypePaiement")}>
-                    <option value="">Choisissez le Type du Paiement</option>
+                  <select name="typePaiement" id ="typePaiement" className="col-md-12" required {...register("typePaiement")}>
+                    <option value="">Choisissez le Type du Paiement </option>
                     <option value="liquide">Liquide</option>
                     <option value="cheque">Cheque </option>
                     <option value="carteBanquaire">Virement</option>
@@ -866,142 +830,18 @@ const ModalAssurance = (props) => {
     );
   }
 };
-const ModalForfait = (props) => {
-  const [typeForfait, setTypeForfait] = React.useState("");
-  const [dateDebut, setDateDebut] = React.useState("");
-  const [typePaiement, setTypePaiement] = React.useState("");
-  const [nombreSeances, setnombreSeances] = React.useState("");
-
-  const schema = yup.object().shape({
-    typeForfait: yup.number(),
-    dateDebut: yup.date(),
-    dateFin: yup.date(),
-    nombreSeances: yup.number().min(0, "Le nombre doit etre supérieur à zero."),
-  });
-  const defaults = {
-    dateDebut: props.client.dateDebut,
-    prenom: props.client.prenom,
-    nombreHeures: props.client.nombreHeures,
-  };
-  const { register, handleSubmit, errors, formState } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: defaults,
-  });
-
-  const [large, setLarge] = useState(props.showing);
-
-  const errorMessage = (error) => {
-    return <CFormText color="danger">{error}</CFormText>;
-  };
-
-  const onSubmit = (data) => {
-    alert(JSON.stringify(data));
-  };
-  if (!props.client) {
-    return <React.Fragment></React.Fragment>;
-  } else {
-    return (
-      <React.Fragment>
-        <CButton
-          size="sm"
-          color="secondary"
-          shape="pill"
-          className=""
-          title="Ajouter forfait"
-          style={{ position: "relative", float: "left" }}
-          onClick={() => setLarge(!large)}
-        >
-          <FontAwesomeIcon size="sm" icon={faChild} />
-        </CButton>
-        <CModal show={large} onClose={setLarge} size="lg">
-          <CModalHeader closeButton>
-            <CModalTitle>
-              Ajouter forfait : {props.client.nom} {props.client.prenom}
-            </CModalTitle>
-          </CModalHeader>
-          <CModalBody>
-            <CForm
-              action="#"
-              method="post"
-              encType="multipart/form-data"
-              className="form-horizontal"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <CFormGroup row>
-                <CCol md="3">
-                  <CLabel htmlFor="typeForfait-input">Type forfait</CLabel>
-                </CCol>
-                <CCol xs="12" md="9">
-                  <select className="col-md-12" {...register("TypeForfait")}>
-                    <option value="">Choisissez le type du forfait</option>
-                    <option value="mensuel">Mensuel</option>
-                    <option value="trimestriel">Trimestriel </option>
-                  </select>
-                  {formState.errors.typeForfait &&
-                    errorMessage(formState.errors.typeForfait.message)}
-                </CCol>
-              </CFormGroup>
-              <CFormGroup row>
-                <CCol md="3">
-                  <CLabel htmlFor="dateDebut-input">Date de début</CLabel>
-                </CCol>
-                <CCol xs="12" md="9">
-                  <input
-                    className="col-md-12"
-                    type="date"
-                    placeholder="Veuillez saisir la date de début"
-                    {...register("dateDebut")}
-                  />
-                  {formState.errors.dateDebut &&
-                    errorMessage(formState.errors.dateDebut.message)}
-                </CCol>
-              </CFormGroup>
-              <CFormGroup row>
-                <CCol md="3">
-                  <CLabel htmlFor="nombreSeances-input">
-                    Nombre de seances
-                  </CLabel>
-                </CCol>
-                <CCol xs="12" md="9">
-                  <input
-                    className="col-md-12"
-                    type="text"
-                    placeholder="300"
-                    {...register("nombreSeances")}
-                  />
-                  {formState.errors.nombreSeances &&
-                    errorMessage(formState.errors.nombreSeances.message)}
-                </CCol>
-              </CFormGroup>
-              <CButton
-                size="sm"
-                color="danger"
-                className="Boutton"
-                onClick={() => setLarge(!large)}
-              >
-                <CIcon name="cil-ban" /> Annuler
-              </CButton>
-              <CButton
-                type="submit"
-                size="sm"
-                color="primary"
-                className="Boutton"
-              >
-                <CIcon name="cil-scrubber" /> Ajouter Forfait
-              </CButton>
-            </CForm>
-          </CModalBody>
-        </CModal>
-      </React.Fragment>
-    );
-  }
-};
 const ModalInscription = (props) => {
   const schema = yup.object().shape({
     dateInscription: yup
       .date()
       .required("La date d'inscription est obligatoire"),
     dateFinInscription: yup.date().required("La date de fin est obligatoire"),
+    montant: yup
+      .number()
+      .min(1, "Le montant doit etre supérieur à zero.")
+      .required("Le montant est obligatoire"),
+    typePaiement: yup.string().required("Liquide/Cheque/CarteBanquaire"),
+  
   });
   const defaults = {
     nom: props.client.nom,
@@ -1070,7 +910,7 @@ const ModalInscription = (props) => {
               <CFormGroup row>
                 <CCol md="3">
                   <CLabel htmlFor="dateFinInscription-input">
-                    Date de fin de validité
+                    Date de fin 
                   </CLabel>
                 </CCol>
                 <CCol xs="12" md="9">
@@ -1082,6 +922,34 @@ const ModalInscription = (props) => {
                   />
                   {formState.errors.dateFinInscription &&
                     errorMessage(formState.errors.dateFinInscription.message)}
+                </CCol>
+              </CFormGroup>
+              <CFormGroup row>
+                <CCol md="3">
+                  <CLabel htmlFor="montant-input">Montant</CLabel>
+                </CCol>
+                <CCol xs="12" md="9">
+                  <input
+                    className="col-md-12"
+                    type="text"
+                    placeholder="Veuillez saisir le montant"
+                    {...register("montant")}
+                  />
+                  {formState.errors.montant &&
+                    errorMessage(formState.errors.montant.message)}
+                </CCol>
+              </CFormGroup>
+              <CFormGroup row>
+                <CCol md="3">
+                  <CLabel htmlFor="select">Type Paiement</CLabel>
+                </CCol>
+                <CCol xs="12" md="9">
+                  <select name="typePaiement" id ="typePaiement" className="col-md-12" required {...register("typePaiement") }>
+                    <option value="">Choisissez le Type du Paiement </option>
+                    <option value="liquide">Liquide</option>
+                    <option value="cheque">Cheque </option>
+                    <option value="carteBanquaire">Virement</option>
+                  </select>
                 </CCol>
               </CFormGroup>
               <CButton
@@ -1108,12 +976,14 @@ const ModalInscription = (props) => {
   }
 };
 const Clients = () => {
+  const [access,setAccess]=useState(true)
   const [data, setData] = useState(clientData);
-  const [dataInfo, setDataInfo] = useState(infoClient);
 
-  const handleDelete = (itemId) => {
-    const items = data.filter((item) => item.id !== itemId);
-    setData(items);
+  const handleDelete = itemId => {
+    const items = data.filter(item => item.id !== itemId);
+    setData(items)
+    alert(JSON.stringify(items))
+    setAccess(false)
   };
 
   return (
@@ -1142,7 +1012,6 @@ const Clients = () => {
                       <ModalEdit client={item} showing={false} />
                       <ModalAssurance client={item} showing={false} />
                       <ModalInscription client={item} showing={false} />
-                      <ModalForfait client={item} />
                       <ModalDelete
                         showing={false}
                         nom={item.nom}
