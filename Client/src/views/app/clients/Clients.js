@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   CButton,
   CBadge,
@@ -9,7 +9,6 @@ import {
   CForm,
   CFormGroup,
   CLabel,
-  CSelect,
   CDataTable,
   CRow,
   CModal,
@@ -31,14 +30,11 @@ import ReactDOM from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHistory,
-  faEllipsisH,
   faEdit,
   faInfoCircle,
   faTrashAlt,
   faBookMedical,
   faSignInAlt,
-  faEllipsisV,
-  faCalendar,
   faPlusSquareSquare,
   faPlusSquare,
   faUser,
@@ -403,7 +399,6 @@ const ModalEdit = (props) => {
   const [dateNaissance, setDateNaissance] = React.useState("");
   const [tele, setTele] = React.useState("");
   const [adresse, setAdresse] = React.useState("");
-  const [statusPayement, setStatusPayement] = React.useState("");
   const schema = yup.object().shape({
     nom: yup.string().required("Le nom est obligatoire"),
     prenom: yup.string().required("Le prenom est obligatoire"),
@@ -424,7 +419,7 @@ const ModalEdit = (props) => {
         "Les mots de passe ne correspondent pas !"
       ),
     telephone: yup.number().required("Le numéro de telephone est obligatoire"),
-    statusPayement: yup.string().required("Status est obligatoire"),
+    dateNaissance: yup.string().required("La date de naissance est obligatoire"),
     adresse: yup.string().required("L'adresse est obligatoire"),
   });
   const defaults = {
@@ -679,7 +674,7 @@ const ModalAssurance = (props) => {
     dateDebut: yup.string().required("La date de début est obligatoire !!"),
     dateFin: yup.string().required("La date de fin est obligatoire !!"),
     montant: yup
-      .number()
+      .string()
       .min(1, "Le montant doit etre supérieur à zero.")
       .required("Le montant est obligatoire"),
     typePaiement: yup.string().required("Liquide/Cheque/CarteBanquaire"),
@@ -758,6 +753,7 @@ const ModalAssurance = (props) => {
                     className="col-md-12"
                     type="date"
                     placeholder="Veuillez saisir la date de début"
+                    min="01/01/1970"
                     {...register("dateDebut")}
                   />
                   {formState.errors.dateDebut &&
@@ -773,6 +769,7 @@ const ModalAssurance = (props) => {
                     className="col-md-12"
                     type="date"
                     placeholder="Veuillez saisir la date de Fin"
+                    min={dateDebut}
                     {...register("dateFin")}
                   />
                   {formState.errors.dateFin &&
@@ -786,7 +783,7 @@ const ModalAssurance = (props) => {
                 <CCol xs="12" md="9">
                   <input
                     className="col-md-12"
-                    type="text"
+                    type="number"
                     placeholder="Veuillez saisir le montant"
                     {...register("montant")}
                   />
@@ -799,11 +796,10 @@ const ModalAssurance = (props) => {
                   <CLabel htmlFor="select">Type Paiement</CLabel>
                 </CCol>
                 <CCol xs="12" md="9">
-                  <select name="typePaiement" id ="typePaiement" className="col-md-12" required {...register("typePaiement")}>
-                    <option value="">Choisissez le Type du Paiement </option>
+                  <select  className="col-md-12" {...register("typePaiement")}>
                     <option value="liquide">Liquide</option>
                     <option value="cheque">Cheque </option>
-                    <option value="carteBanquaire">Virement</option>
+                    <option value="virement">Virement</option>
                   </select>
                 </CCol>
               </CFormGroup>
@@ -833,14 +829,14 @@ const ModalAssurance = (props) => {
 const ModalInscription = (props) => {
   const schema = yup.object().shape({
     dateInscription: yup
-      .date()
-      .required("La date d'inscription est obligatoire"),
-    dateFinInscription: yup.date().required("La date de fin est obligatoire"),
+      .string()
+      .required("La date de debut de l'inscription est obligatoire"),
+    dateFinInscription: yup.string().required("La date de fin est obligatoire"),
     montant: yup
-      .number()
+      .string()
       .min(1, "Le montant doit etre supérieur à zero.")
       .required("Le montant est obligatoire"),
-    typePaiement: yup.string().required("Liquide/Cheque/CarteBanquaire"),
+    typePaiement: yup.string(),
   
   });
   const defaults = {
@@ -903,7 +899,7 @@ const ModalInscription = (props) => {
                     placeholder="Veuillez saisir la date d'inscription"
                     {...register("dateInscription")}
                   />
-                  {formState.errors.prenom &&
+                  {formState.errors.dateInscription &&
                     errorMessage(formState.errors.dateInscription.message)}
                 </CCol>
               </CFormGroup>
@@ -931,7 +927,7 @@ const ModalInscription = (props) => {
                 <CCol xs="12" md="9">
                   <input
                     className="col-md-12"
-                    type="text"
+                    type="number"
                     placeholder="Veuillez saisir le montant"
                     {...register("montant")}
                   />
@@ -945,7 +941,7 @@ const ModalInscription = (props) => {
                 </CCol>
                 <CCol xs="12" md="9">
                   <select name="typePaiement" id ="typePaiement" className="col-md-12" required {...register("typePaiement") }>
-                    <option value="">Choisissez le Type du Paiement </option>
+                    <option value="none">Non payé </option>
                     <option value="liquide">Liquide</option>
                     <option value="cheque">Cheque </option>
                     <option value="carteBanquaire">Virement</option>
