@@ -4,17 +4,17 @@ const chevauxData = [
 
       nom: "EPONA",
 
-      DateNaissance: "16/03/2018",
+      dateDeNaissance: "16/03/2018",
 
-      DateAcces: "13/03/2019",
+      dateAcces: "13/03/2019",
 
-      Paddock: 1,
+      paddock: 1,
 
-      Race: "Info",
+      race: "Info",
 
-      EtatDeSante: "Bonne Santé",
+      etatDeSante: "Bonne Santé",
 
-      Status: "Disponible",
+      status: "Disponible",
 
     },
 
