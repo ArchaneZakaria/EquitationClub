@@ -153,13 +153,13 @@ const ModalDelete = (props) => {
         <CModalHeader closeButton>
           <CModalTitle>Confirmation</CModalTitle>
         </CModalHeader>
-        <CModalBody>Etes-vous sur vous voulez supprimer ?</CModalBody>
+        <CModalBody>Etes-vous de vouloir supprimer le cheval ?</CModalBody>
         <CModalFooter>
           <CButton color="primary" onClick={deleting}>
-            DELETE
+            Oui
           </CButton>{" "}
           <CButton color="secondary" onClick={() => setModal(false)}>
-            Cancel
+            Annuler
           </CButton>
         </CModalFooter>
       </CModal>

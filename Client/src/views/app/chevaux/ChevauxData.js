@@ -46,7 +46,7 @@ const chevauxData = [
 
       race: "Info",
 
-      etatDeSante: "Besoin Etalonage",
+      etatDeSante: "Mauvaise Santé",
 
       status: "Disponible",
 
@@ -63,7 +63,7 @@ const chevauxData = [
 
       race: "Info",
 
-      etatDeSante: "Non Vacciné",
+      etatDeSante: "Bonne Santé",
 
       status: "Disponible",
 
