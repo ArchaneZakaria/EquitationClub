@@ -837,7 +837,7 @@ const ModalInscription = (props) => {
       .required("La date d'inscription est obligatoire"),
     dateFinInscription: yup.date().required("La date de fin est obligatoire"),
     montant: yup
-      .number()
+      .number("Le montant est obligatoire")
       .min(1, "Le montant doit etre supérieur à zero.")
       .required("Le montant est obligatoire"),
     typePaiement: yup.string().required("Liquide/Cheque/CarteBanquaire"),

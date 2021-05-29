@@ -207,7 +207,7 @@ const ModalNewCheval = (props) => {
     dateDeNaissance: yup
       .date()
       .required("La date de Naissance est obligatoire"),
-    dateAcces: yup.date().required("La Date est obligatoire"),
+    dateAcces: yup.date("La Date est obligatoire").required("La Date est obligatoire"),
     paddock: yup.string(),
     race: yup.string().required("La Race est obligatoire"),
     etatDeSante: yup.string().required("Etat de santé obligatoire"),
