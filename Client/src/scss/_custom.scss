@@ -47,6 +47,11 @@
 .dropdown:active .dropdown-content {
   display:initial;
 }
+.horse{
+  width: 500px;
+  height: 500px;
+  display:flex;
+}
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {

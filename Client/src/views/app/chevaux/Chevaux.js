@@ -32,11 +32,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import CIcon from "@coreui/icons-react";
 import { DocsLink } from "src/reusable";
-import historyData from '../personnels/HistoryData'
-import detailsHistory from '../personnels/detailsHistory'
+import historyData from "../personnels/HistoryData";
+import detailsHistory from "../personnels/detailsHistory";
 import chevauxData from "../chevaux/ChevauxData";
 import clientData from "../clients/ClientData";
-import historyCheval from "../chevaux/historyCheval"
+import historyCheval from "../chevaux/historyCheval";
 import ReactDOM from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -47,17 +47,18 @@ import {
   faTrashAlt,
   faChevronUp,
   faChevronDown,
+  faCamera,
 } from "@fortawesome/free-solid-svg-icons";
 
 const getBadge = (status) => {
   switch (status) {
-    case "bonneSante":
+    case "Bonne Santé":
       return "success";
-    case "Inactive":
+    case "Non Vacciné":
       return "secondary";
-    case "Pending":
+    case "Besoin Etalonage":
       return "warning";
-    case "mauvaiseSante":
+    case "Mauvaise Santé":
       return "danger";
     default:
       return "primary";
@@ -72,93 +73,60 @@ const fields = [
   "etatDeSante",
   "Options",
 ];
-const fieldsHistory=[
-  { key: 'Client', _style: { width: '15%'} },
-  { key: 'Type', _style: { width: '12.5%'} },
-  { key: 'Description', _style: { width: '32.5%'} },
-  { key: 'Date', _style: { width: '12.5%'} },
-  { key: 'DureeEnH', _style: { width: '12.5%'} },
-  { key: 'Remarque', _style: { width: '12.5%'} },
-]
+const fieldsHistory = [
+  { key: "Client", _style: { width: "15%" } },
+  { key: "Type", _style: { width: "12.5%" } },
+  { key: "Description", _style: { width: "32.5%" } },
+  { key: "Date", _style: { width: "12.5%" } },
+  { key: "DureeEnH", _style: { width: "12.5%" } },
+  { key: "Remarque", _style: { width: "12.5%" } },
+];
 
-const ModalHistorique=(props)=>{
+const ModalHistorique = (props) => {
+  const [data, setData] = useState(detailsHistory);
+  const [modal, setModal] = React.useState(props.showing);
+  const [details, setDetails] = useState([]);
 
-  const [data,setData]=useState(detailsHistory)
-  const [modal, setModal] =React.useState(props.showing)
-  const [details, setDetails] = useState([])
+  return (
+    <React.Fragment>
+      <CButton
+        size="sm"
+        shape="pill"
+        color="secondary"
+        className=""
+        title="Historique des taches"
+        style={{ position: "relative", float: "left" }}
+        onClick={() => {
+          setModal(!modal);
+        }}
+      >
+        <FontAwesomeIcon size="sm" icon={faHistory} />
+      </CButton>
 
-  const toggleDetails = (index) => {
-      const position = details.indexOf(index)
-      let newDetails = details.slice()
-      if (position !== -1) {
-        newDetails.splice(position, 1)
-      } else {
-        newDetails = [...details, index]
-      }
-      setDetails(newDetails)
-    }
-
-  return(
-      <React.Fragment>
-          <CButton size="sm" shape="pill" color="secondary" className=""  title="Historique des taches" style={{position: "relative",float:"left"}}  onClick={()=>{setModal(!modal)}}>
-              <FontAwesomeIcon  size="sm" icon={faHistory}/>
-              </CButton>
-              
-               <CModal 
-                  show={modal} 
-                  onClose={setModal}
-                  size='lg'
-                  >
-                  <CModalHeader closeButton>
-                      <CModalTitle>Historique du cheval : {props.nom}</CModalTitle>
-                  </CModalHeader>
-                  <CModalBody>
-                  <CTabs activeTab="historique">
-            <CNav variant="tabs">
-              <CNavItem>
-                <CNavLink data-tab="historique">
-                historique
-                </CNavLink>
-              </CNavItem>
-              
-            </CNav>
-            <CTabContent>
-              <CTabPane data-tab="historique">
-              <CDataTable 
-                                  clickableRows
-                                  items={historyCheval}
-                                  fields={fieldsHistory}
-                                  hover
-                                  striped
-                                  bordered
-                                  size="sm"
-                                  itemsPerPage={10}
-                                  pagination
-                                  scopedSlots = {{
-                                      
-                                      'show_details':
-                                        (item, index)=>{
-                                          return (
-                                            <td className="py-2">
-                                                <CButton size="sm" shape="pill" color="secondary" className=""  title="Plus d'informations" style={{position: "relative",float:"left"}} onClick={()=>{toggleDetails(index)}}>
-                                              {details.includes(index) ? <FontAwesomeIcon  size="sm" icon={faChevronUp}/> : <FontAwesomeIcon  size="sm" icon={faChevronDown}/>}
-                                              </CButton>
-                                            </td>
-                                            )
-                                        }
-                                      
-                                    }}
-                              />
-              </CTabPane>
-            </CTabContent>
-          </CTabs>
-                              
-                  </CModalBody>
-          </CModal>
-      </React.Fragment>
-              
-)
-}
+      <CModal show={modal} onClose={setModal} size="lg">
+        <CModalHeader closeButton>
+          <CModalTitle>Historique du cheval : {props.nom}</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+                <CDataTable
+                  clickableRows
+                  items={historyCheval}
+                  fields={fieldsHistory}
+                  tableFilterValue={props.cheval}
+                  hover
+                  striped
+                  bordered
+                  size="sm"
+                  itemsPerPage={10}
+                  pagination
+                  scopedSlots={{
+                  }}
+                />
+        </CModalBody>
+      </CModal>
+    </React.Fragment>
+  );
+};
 
 const ModalDelete = (props) => {
   const deleting = () => {
@@ -208,25 +176,24 @@ const ModalInfo = (props) => {
         shape="pill"
         color="secondary"
         className=""
-        title="Supprimer"
+        title="Image"
         style={{ position: "relative", float: "left" }}
         onClick={() => {
           setModal(!modal);
         }}
       >
-        <FontAwesomeIcon size="sm" icon={faInfoCircle} />
+        <FontAwesomeIcon size="sm" icon={faCamera} />
       </CButton>
       <CModal show={modal} onClose={setModal}>
         <CModalHeader closeButton>
-          <CModalTitle>Modal title</CModalTitle>
+          <CModalTitle>Photo</CModalTitle>
         </CModalHeader>
         <CModalBody>
-
+        <img src="https://res.cloudinary.com/dk-find-out/image/upload/q_80,w_1920,f_auto/MA_00600259_vpf1m0.jpg" className ="horse" alt="Logo" />
         </CModalBody>
         <CModalFooter>
-          <CButton color="primary">{props.nom}</CButton>{" "}
-          <CButton color="secondary" onClick={() => setModal(false)}>
-            Cancel
+          <CButton color="danger" onClick={() => setModal(false)}>
+            Fermer
           </CButton>
         </CModalFooter>
       </CModal>
@@ -438,9 +405,9 @@ const ModalEditCheval = (props) => {
     nom: yup.string().trim().required("Le nom est obligatoire").default("sss"),
     race: yup.string().trim().required("Le race est obligatoire"),
     dateDeNaissance: yup
-    .date()
-    .required("La date de Naissance est obligatoire"),
-  dateAcces: yup.date().required("La Date est obligatoire"),
+      .date()
+      .required("La date de Naissance est obligatoire"),
+    dateAcces: yup.date().required("La Date est obligatoire"),
     paddock: yup
       .number()
       .max(15)
@@ -543,7 +510,8 @@ const ModalEditCheval = (props) => {
               <CFormGroup row>
                 <CCol md="3">
                   <CLabel htmlFor="dateDeNaissance-input">
-                    Date de naissance                  </CLabel>
+                    Date de naissance{" "}
+                  </CLabel>
                 </CCol>
                 <CCol xs="12" md="9">
                   <input
@@ -587,57 +555,77 @@ const ModalEditCheval = (props) => {
                 </CCol>
               </CFormGroup>
               <CFormGroup row>
-              <CCol md="3">
-                <CLabel htmlFor="etatDeSante-input">Etat de Santé</CLabel>
-              </CCol>
-              <CCol xs="12" md="9">
-                <select className="col-md-12" required {...register("etatDeSante")}>
-                  <option value="">Veuillez choisir l'etat du cheval</option>
-                  <option value="bonneSante"> Bonne santé</option>
-                  <option value="mauvaiseSante">Mauvaise santé </option>
-                </select>
-                {formState.errors.race &&
-                  errorMessage(formState.errors.race.message)}
-              </CCol>
-            </CFormGroup>
-            <CFormGroup row>
-              <CCol md="3">
-                <CLabel htmlFor="select">Status</CLabel>
-              </CCol>
-              <CCol xs="12" md="9">
-                <select className="col-md-12" required {...register("status")}>
-                  <option value="">Veuillez choisir le status</option>
-                  <option value="disponible">Disponible</option>
-                  <option value="indisponible">Indisponible </option>
-                </select>
-              </CCol>
-            </CFormGroup>
-            <CFormGroup row>
-              <CCol md="3">
-                <CLabel htmlFor="select">Client</CLabel>
-              </CCol>
-              <CCol xs="12" md="9">
-                <select className="col-md-12" required {...register("clientCheval")}>
-                <option value="">Veuillez choisir un client</option>
+                <CCol md="3">
+                  <CLabel htmlFor="etatDeSante-input">Etat de Santé</CLabel>
+                </CCol>
+                <CCol xs="12" md="9">
+                  <select
+                    className="col-md-12"
+                    required
+                    {...register("etatDeSante")}
+                  >
+                    <option value="">Veuillez choisir l'etat du cheval</option>
+                    <option value="bonneSante"> Bonne santé</option>
+                    <option value="mauvaiseSante">Mauvaise santé </option>
+                  </select>
+                  {formState.errors.race &&
+                    errorMessage(formState.errors.race.message)}
+                </CCol>
+              </CFormGroup>
+              <CFormGroup row>
+                <CCol md="3">
+                  <CLabel htmlFor="select">Status</CLabel>
+                </CCol>
+                <CCol xs="12" md="9">
+                  <select
+                    className="col-md-12"
+                    required
+                    {...register("status")}
+                  >
+                    <option value="">Veuillez choisir le status</option>
+                    <option value="disponible">Disponible</option>
+                    <option value="indisponible">Indisponible </option>
+                  </select>
+                </CCol>
+              </CFormGroup>
+              <CFormGroup row>
+                <CCol md="3">
+                  <CLabel htmlFor="select">Client</CLabel>
+                </CCol>
+                <CCol xs="12" md="9">
+                  <select
+                    className="col-md-12"
+                    required
+                    {...register("clientCheval")}
+                  >
+                    <option value="">Veuillez choisir un client</option>
 
-                  {clientData.map((item) => (
-                    <option value={item.nom}>
-                      {item.nom + " " + item.prenom}
-                    </option>
-                  ))}
-                </select>
-              </CCol>
-            </CFormGroup>              
-            <CButton className="Boutton" size="sm" color="danger" onClick ={()=>setLarge(false)}>
+                    {clientData.map((item) => (
+                      <option value={item.nom}>
+                        {item.nom + " " + item.prenom}
+                      </option>
+                    ))}
+                  </select>
+                </CCol>
+              </CFormGroup>
+              <CButton
+                className="Boutton"
+                size="sm"
+                color="danger"
+                onClick={() => setLarge(false)}
+              >
                 <CIcon name="cil-ban" /> Annuler
               </CButton>
-              <CButton className="Boutton" type="submit" size="sm" color="primary">
+              <CButton
+                className="Boutton"
+                type="submit"
+                size="sm"
+                color="primary"
+              >
                 <CIcon name="cil-scrubber" /> Modifier
               </CButton>
-
             </CForm>
           </CModalBody>
-
         </CModal>
       </React.Fragment>
     );
@@ -675,13 +663,21 @@ const Chevaux = () => {
                     <td>
                       <ModalInfo showing={false} nom={item.nom} />
                       <ModalEditCheval cheval={item} />
+                      <ModalHistorique showing={false} nom={item.nom} cheval={item.cheval} />
                       <ModalDelete
                         showing={false}
                         nom={item.nom}
                         onDelete={handleDelete}
                         id={item.id}
                       />
-                    <ModalHistorique showing={false} nom={item.nom}/>
+
+                    </td>
+                  ),
+                  etatDeSante: (item) => (
+                    <td>
+                      <CBadge color={getBadge(item.etatDeSante)}>
+                        {item.etatDeSante}
+                      </CBadge>
                     </td>
                   ),
                 }}
