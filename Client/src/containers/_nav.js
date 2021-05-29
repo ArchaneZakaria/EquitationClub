@@ -20,6 +20,18 @@ const _nav =  [
     _tag: 'CSidebarNavTitle',
     _children: ['App']
   },
+  
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Séance',
+    to: '/App/Seance',
+    icon: 'cil-list',
+  },{
+    _tag: 'CSidebarNavItem',
+    name: 'Tache',
+    to: '/App/Tache',
+    icon: 'cil-task',
+  },
   {
     _tag: 'CSidebarNavItem',
     name: 'Personnels',
@@ -31,17 +43,6 @@ const _nav =  [
     name: 'Clients',
     to: '/App/Clients',
     icon: 'cil-people',
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Séance',
-    to: '/App/Seance',
-    icon: 'cil-list',
-  },{
-    _tag: 'CSidebarNavItem',
-    name: 'Tache',
-    to: '/App/Tache',
-    icon: 'cil-task',
   },{
     _tag: 'CSidebarNavItem',
     name: 'Paiements',

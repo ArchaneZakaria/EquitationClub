@@ -246,8 +246,59 @@ const Data=[{
   Status: 'Completed',
   Priority: 'High',
   RecurrenceRule: 'FREQ=DAILY;INTERVAL=1;COUNT=5',
-  Clients:'ARCHANE Zakaria'
-}];
+  Clients:2
+},
+{
+  Id: 5,
+  Titre: 'test',
+  Description: 'siroooo t7awaaaw',
+  StartTime:  new Date('May 29, 2021 08:30:00'),
+  EndTime:  new Date('May 29, 2021 10:30:00'),
+  IsAllDay: false,
+  Status: 'Completed',
+  Priority: 'High',
+  RecurrenceRule: 'FREQ=DAILY;INTERVAL=1;COUNT=5',
+  Clients:3,
+  RecurrenceID:7
+},
+{
+  Id: 6,
+  Titre: 'test',
+  Description: 'siroooo t7awaaaw',
+  StartTime:  new Date('May 30, 2021 12:30:00'),
+  EndTime:  new Date('May 30, 2021 14:30:00'),
+  IsAllDay: false,
+  Status: 'Completed',
+  Priority: 'High',
+  RecurrenceRule: 'FREQ=DAILY;INTERVAL=1;COUNT=5',
+  Clients:3,
+},{
+  Id:7,
+  Titre:'testBd',
+  Location:'salé',
+  StartTime:'2021-05-06T14:00:00.000Z',
+  EndTime:'2021-05-06T15:00:00.000Z',
+  IsAllDay: false,
+  Clients:1,
+  RecurrenceRule: 'FREQ=WEEKLY;BYDAY=WE;INTERVAL=1;UNTIL=20210626T140000Z',
+  RecurrenceException:null,
+  RecurrenceID:null
+},{
+  Id:8,
+  Titre:'testBid',
+  Location:'salé',
+  StartTime:'2021-05-06T15:00:00.000Z',
+  EndTime:'2021-05-06T16:00:00.000Z',
+  IsAllDay: false,
+  Clients:1,
+  RecurrenceRule: 'FREQ=WEEKLY;BYDAY=WE;INTERVAL=1;UNTIL=20210626T130000Z',
+  RecurrenceException:null,
+  RecurrenceID:7,
+  Description:'fuck to all',
+  Guid:'8950ef99-f0f9-9c57-587a-3880266887aa'
+}
+
+];
 //// Les récurrences :  https://www.telerik.com/kendo-react-ui/components/scheduler/recurring/
 
 
@@ -390,6 +441,24 @@ onEventClick(args){
           alert(JSON.stringify(event));
       };
 
+
+
+      onActionBegin(args) {
+        if (args.requestType === 'eventCreate' || args.requestType === 'eventChange') {
+            let data;
+            if (args.requestType === 'eventCreate') {
+                data = args.data[0];
+                alert(JSON.stringify(args.data))
+            }
+            else if (args.requestType === 'eventChange') {
+                data = args.data;
+                alert(JSON.stringify(args.data))
+            }
+           {/*if (!this.scheduleObj.isSlotAvailable(data)) {
+                args.cancel = true;
+            }*/} 
+        }
+    }
 onPopupOpen(args) {
   if (args.type === 'Editor') {
       if (!args.element.querySelector('.custom-field-row')) {
@@ -404,14 +473,13 @@ onPopupOpen(args) {
           row.appendChild(container);
           let drowDownList = new DropDownList({
               dataSource: [
-                  { text: 'Séance d\'entrainement', value: 'public-event' },
+                  { text: 'Entrainement', value: 'public-event' },
                   { text: 'Balade', value: 'maintenance' },
-                  { text: 'Saut d\'obstacle', value: 'commercial-event' },
-                  { text: 'Family Event', value: 'family-event' }
+                  { text: 'Saut d\'obstacle', value: 'commercial-event' }
               ],
               fields: { text: 'text', value: 'value' },
               value: args.data.EventType,
-              floatLabelType: 'Always', placeholder: 'Type de l\'événement'
+              floatLabelType: 'Always', placeholder: 'Type de séance'
           });
           drowDownList.appendTo(inputEle);
           inputEle.setAttribute('name', 'EventType');
@@ -433,18 +501,21 @@ render(){
               Liste des séances
             </CCardHeader>
             <CCardBody>
-            <ModalNewSeance showing={this.state.show} sum={this.onAddClick.bind(this)}/>
-                <ScheduleComponent ref={t => this.scheduleObj = t}  eventSettings={{dataSource:this.data,
+            {/*<ModalNewSeance showing={this.state.show} sum={this.onAddClick.bind(this)}/>*/}
+                <ScheduleComponent cssClass='timeline-resource'  ref={t => this.scheduleObj = t}  eventSettings={{dataSource:this.data,
                 enableTooltip: true ,
             fields: {
               id: 'Id',
               subject: { name: 'Titre' },
               isAllDay: { name: 'IsAllDay' },
               startTime: { name: 'StartTime' },
-              endTime: { name: 'EndTime' }
+              endTime: { name: 'EndTime' },
+              EventType: { name: 'EventType' }
           }
 }}
 eventClick={this.onEventClick.bind(this)} 
+actionBegin={this.onActionBegin.bind(this)}
+sameDayAlert={false}
 firstDayOfWeek={1} 
                 startHour={'08:00'} endHour={'19:00'}   
                 readonly={false} timezone={'FR'} 
