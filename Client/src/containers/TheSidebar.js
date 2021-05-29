@@ -27,7 +27,7 @@ const TheSidebar = () => {
     <CSidebar
       show={show}
       onShowChange={(val) => dispatch({type: 'set', sidebarShow: val })}
-      style={{backgroundColor:"#123c69"}}
+      style={{backgroundColor:"#2b7a78"}}
     >
       <CSidebarBrand className="d-md-down-none" to="/">
       <FontAwesomeIcon icon={faHorseHead} size="3x" />

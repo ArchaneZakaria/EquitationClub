@@ -413,15 +413,11 @@ const ModalEdit=(props)=>{
                     />                    
                   </CCol>
                 </CFormGroup>
-                <CButton type="submit" size="sm" color="primary" ><CIcon name="cil-scrubber"/> Créer</CButton>
+                <CButton type="submit" size="sm" color="primary" onClick={() => setLarge(false)}><CIcon name="cil-scrubber"/> Modifier</CButton>
               <CButton type="reset" size="sm" color="danger"><CIcon name="cil-ban" /> Annuler</CButton>
               </CForm>
                         </CModalBody>
                         <CModalFooter>
-                            <CButton 
-                            color="secondary" 
-                            onClick={() => setLarge(false)}
-                            >Fermer</CButton>
                         </CModalFooter>
             </CModal>
             </React.Fragment>

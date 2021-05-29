@@ -38,7 +38,7 @@ const TheHeader = () => {
   }
 
   return (
-    <CHeader withSubheader style={{backgroundColor:"#c5c6c7"}}>
+    <CHeader withSubheader style={{backgroundColor:"#3aafa9",zIndex:1}}>
       <CToggler
         inHeader
         className="ml-md-3 d-lg-none"
@@ -72,7 +72,7 @@ const TheHeader = () => {
       {/*  <TheHeaderDropdown/> */}
       </CHeaderNav>
 
-      <CSubheader className="px-3 justify-content-between" style={{backgroundColor:"#1f2833"}}>
+      <CSubheader  className="px-3 justify-content-between" style={{backgroundColor:"#def2f1"}}>
         <CBreadcrumbRouter 
           className="border-0 c-subheader-nav m-0 px-0 px-md-3" 
           routes={routes} 
