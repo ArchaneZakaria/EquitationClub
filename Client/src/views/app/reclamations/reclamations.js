@@ -43,9 +43,7 @@ import {
   CFormGroup,
   CLabel,
   CModalFooter,
-  CFormLabel,
-  CHeader,
-  CBreadcrumbItem,
+  CLink,
 } from "@coreui/react";
 const fieldsReclamations = [
   { key: "nom", _style: { width: "15%" } },
@@ -88,6 +86,8 @@ const ModalInfo = (props) => {
 };
 
 const ModalReclamations = (props) => {
+  const [collapsed, setCollapsed] = React.useState(true);
+  const [showCard, setShowCard] = React.useState(true);
   const [accordion, setAccordion] = useState(0);
   const [modal, setModal] = React.useState(props.showing);
   const [reclaData, setReclaData] = useState(reclamationsData);
@@ -134,51 +134,48 @@ const ModalReclamations = (props) => {
             </CNav>
             <CTabContent>
               <CTabPane data-tab="1">
-                <CRow>
-                  <CCol xl="12">
-                    <CCard>
-                      <CCardBody>
-                        <div id="accordion">
-                          <CCard className="mb-0">
-                            <CCollapse show={accordion === 0}>
-                              <CCardBody>
-                                <CRow>
-                                  <CCol>
-                                    <CDataTable
-                                      tableFilter
-                                      clickableRows
-                                      items={reclaData}
-                                      fields={fieldsReclamations}
-                                      hover
-                                      striped
-                                      bordered
-                                      size="sm"
-                                      itemsPerPage={10}
-                                      pagination
-                                      scopedSlots={{
-                                        message: (item) => (
-                                          <td>
-                                            <ModalInfo
-                                              nom={item.nom}
-                                              prenom={item.prenom}
-                                              message={item.message}
-                                              email={item.email}
-                                              date={item.date}
-                                            />
-                                          </td>
-                                        ),
-                                      }}
-                                    />
-                                  </CCol>
-                                </CRow>
-                              </CCardBody>
-                            </CCollapse>
-                          </CCard>
-                        </div>
-                      </CCardBody>
-                    </CCard>
-                  </CCol>
-                </CRow>
+                <CCard>
+                  {/*--------------------------------------------------------------------------------- */}
+                  {reclamationsData.map(
+                    (item) => (
+                      <CCol xs="12" sm="6" md="4">
+                      <br></br>
+                      <CFade in={showCard}>
+                        <CCard className="col-md-12">
+                          <CCardHeader>
+                            {item.nom} 
+                            <div className="card-header-actions">
+                              <CLink
+                                className="card-header-action"
+                                onClick={() => setCollapsed(!collapsed)}
+                              >
+                                <CIcon
+                                  name={
+                                    collapsed
+                                      ? "cil-chevron-bottom"
+                                      : "cil-chevron-top"
+                                  }
+                                />
+                              </CLink>
+                              <CLink
+                                className="card-header-action"
+                                onClick={() => setShowCard(false)}
+                              >
+                                <CIcon name="cil-x-circle" />
+                              </CLink>
+                            </div>
+                          </CCardHeader>
+                          <CCollapse show={collapsed}>
+                            <CCardBody>
+                              {item.message}
+                            </CCardBody>
+                          </CCollapse>
+                        </CCard>
+                      </CFade>
+                    </CCol>
+                  ))}
+            
+                </CCard>
               </CTabPane>
             </CTabContent>
             <CTabContent>
@@ -191,6 +188,7 @@ const ModalReclamations = (props) => {
                   onSubmit={handleSubmit(onSubmit)}
                 >
                   {" "}
+          
                   <CRow>
                     <CCol xl="12">
                       <CCard>
@@ -270,7 +268,7 @@ const ModalReclamations = (props) => {
                                   name="message"
                                   rows="4"
                                   cols="50"
-                                  {...register('message')}
+                                  {...register("message")}
                                 ></textarea>
                                 {formState.errors.message &&
                                   formState.errors.message.type ===
@@ -283,13 +281,22 @@ const ModalReclamations = (props) => {
                       </CCard>
                     </CCol>
                   </CRow>{" "}
-                  <CButton className ="Boutton" type="reset" size="sm" color="danger">
+                  <CButton
+                    className="Boutton"
+                    type="reset"
+                    size="sm"
+                    color="danger"
+                  >
                     <CIcon name="cil-ban" /> Vider les champs
                   </CButton>
-                  <CButton className ="Boutton" type="submit" size="sm" color="primary">
+                  <CButton
+                    className="Boutton"
+                    type="submit"
+                    size="sm"
+                    color="primary"
+                  >
                     <CIcon name="cil-scrubber" /> Envoyer
                   </CButton>
-
                 </CForm>
               </CTabPane>
             </CTabContent>

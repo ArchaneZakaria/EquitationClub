@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   CButton,
   CBadge,
@@ -77,7 +77,7 @@ const ModalDelete = (props) => {
         shape="pill"
         color="danger"
         className=""
-        title="Supprimer"
+        title="oui"
         style={{ position: "relative", float: "left" }}
         onClick={() => {
           setModal(!modal);
@@ -91,8 +91,8 @@ const ModalDelete = (props) => {
         </CModalHeader>
         <CModalBody>Êtes-vous sur de vouloir supprimer le client .</CModalBody>
         <CModalFooter>
-          <CButton color="danger" onClick={deleting}>
-            DELETE
+          <CButton color="primary" onClick={deleting}>
+            Oui
           </CButton>{" "}
           <CButton color="secondary" onClick={() => setModal(false)}>
             Cancel
@@ -193,6 +193,7 @@ const ModalNewClient = (props) => {
     telephone: yup.number().required("Le numéro de telephone est obligatoire"),
     adresse: yup.string().required("L'adresse est obligatoire"),
   });
+
 
   const { register, handleSubmit, errors, formState } = useForm({
     resolver: yupResolver(schema),
@@ -422,14 +423,22 @@ const ModalEdit = (props) => {
     dateNaissance: yup.string().required("La date de naissance est obligatoire"),
     adresse: yup.string().required("L'adresse est obligatoire"),
   });
+  React.useEffect(() => {
+    setValue("nom" , nom)
+    setValue("prenom" , prenom)
+    setValue("CIN" , CIN)
+    setValue("password" , password)
+    setValue("email" , email)
+    setValue("telephone" , tele)
+    setValue("adresse" , adresse)
+  });
   const defaults = {
     nom: props.client.nom,
     prenom: props.client.prenom,
     email: props.client.email,
   };
-  const { register, handleSubmit, errors, formState } = useForm({
+  const { register, handleSubmit,setValue, errors, formState } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: defaults,
   });
 
   const [large, setLarge] = useState(props.showing);
