@@ -15,7 +15,7 @@ import {
   faCircle,
   faExternalLinkAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import CIcon from '@coreui/icons-react'
+import CIcon from "@coreui/icons-react";
 import {
   CCol,
   CNav,
@@ -29,7 +29,7 @@ import {
   CCardTitle,
   CDataTable,
   CCollapse,
-  CCardFooter,
+  CContainer,
   CCard,
   CCardHeader,
   CRow,
@@ -102,7 +102,6 @@ const ModalReclamations = (props) => {
     sujet: yup.string().trim().required("Le prenom est obligatoire"),
     date: yup.date().required("Le numero de telephone est obligatoire"),
     message: yup.string().required("La fonction est obligatoire"),
-    
   });
   const { register, handleSubmit, errors, formState, setValue } = useForm({
     resolver: yupResolver(schema),
@@ -127,10 +126,10 @@ const ModalReclamations = (props) => {
           <CTabs activeTab="1">
             <CNav variant="pills">
               <CNavItem>
-                <CNavLink data-tab="1">Admin</CNavLink>
+                <CNavLink data-tab="1">Liste des réclamations</CNavLink>
               </CNavItem>
               <CNavItem>
-                <CNavLink data-tab="2">Client</CNavLink>
+                <CNavLink data-tab="2">Envoyer Réclamation</CNavLink>
               </CNavItem>
             </CNav>
             <CTabContent>
@@ -141,40 +140,35 @@ const ModalReclamations = (props) => {
                       <CCardBody>
                         <div id="accordion">
                           <CCard className="mb-0">
-                            <CCardHeader id="headingOne"></CCardHeader>
                             <CCollapse show={accordion === 0}>
                               <CCardBody>
                                 <CRow>
                                   <CCol>
-                                    <CCard>
-                                      <CCardBody>
-                                        <CDataTable
-                                          tableFilter
-                                          clickableRows
-                                          items={reclaData}
-                                          fields={fieldsReclamations}
-                                          hover
-                                          striped
-                                          bordered
-                                          size="sm"
-                                          itemsPerPage={10}
-                                          pagination
-                                          scopedSlots={{
-                                            message: (item) => (
-                                              <td>
-                                                <ModalInfo
-                                                  nom={item.nom}
-                                                  prenom={item.prenom}
-                                                  message={item.message}
-                                                  email={item.email}
-                                                  date={item.date}
-                                                />
-                                              </td>
-                                            ),
-                                          }}
-                                        />
-                                      </CCardBody>
-                                    </CCard>
+                                    <CDataTable
+                                      tableFilter
+                                      clickableRows
+                                      items={reclaData}
+                                      fields={fieldsReclamations}
+                                      hover
+                                      striped
+                                      bordered
+                                      size="sm"
+                                      itemsPerPage={10}
+                                      pagination
+                                      scopedSlots={{
+                                        message: (item) => (
+                                          <td>
+                                            <ModalInfo
+                                              nom={item.nom}
+                                              prenom={item.prenom}
+                                              message={item.message}
+                                              email={item.email}
+                                              date={item.date}
+                                            />
+                                          </td>
+                                        ),
+                                      }}
+                                    />
                                   </CCol>
                                 </CRow>
                               </CCardBody>
@@ -189,7 +183,6 @@ const ModalReclamations = (props) => {
             </CTabContent>
             <CTabContent>
               <CTabPane data-tab="2">
-                
                 <CForm
                   action="#"
                   method="post"
@@ -197,88 +190,106 @@ const ModalReclamations = (props) => {
                   className="form-horizontal"
                   onSubmit={handleSubmit(onSubmit)}
                 >
-                  <CFormGroup row>
-                    <CCol md="3">
-                      <CLabel htmlFor="nom-input">Nom</CLabel>
+                  {" "}
+                  <CRow>
+                    <CCol xl="12">
+                      <CCard>
+                        <CCardBody>
+                          <CCard className="mb-0">
+                            <CFormGroup row>
+                              <CCol md="3">
+                                <CLabel htmlFor="nom-input">Nom</CLabel>
+                              </CCol>
+                              <CCol xs="12" md="9">
+                                <input
+                                  className="col-md-12"
+                                  type="text"
+                                  placeholder="Veuillez saisir le nom"
+                                  {...register("nom")}
+                                />
+                                {formState.errors.nom &&
+                                  errorMessage(formState.errors.nom.message)}
+                              </CCol>
+                            </CFormGroup>
+                            <CFormGroup row>
+                              <CCol md="3">
+                                <CLabel htmlFor="prenom-input">Prenom</CLabel>
+                              </CCol>
+                              <CCol xs="12" md="9">
+                                <input
+                                  className="col-md-12"
+                                  type="text"
+                                  placeholder="Veuillez saisir le prenom"
+                                  {...register("prenom")}
+                                />
+                                {formState.errors.prenom &&
+                                  errorMessage(formState.errors.prenom.message)}
+                              </CCol>
+                            </CFormGroup>
+                            <CFormGroup row>
+                              <CCol md="3">
+                                <CLabel htmlFor="email-input">
+                                  Adresse email
+                                </CLabel>
+                              </CCol>
+                              <CCol xs="12" md="9">
+                                <input
+                                  className="col-md-12"
+                                  type="text"
+                                  placeholder="Veuillez saisir l'email"
+                                  {...register("email")}
+                                />
+                                {formState.errors.email &&
+                                  errorMessage(formState.errors.email.message)}
+                              </CCol>
+                            </CFormGroup>
+                            <CFormGroup row>
+                              <CCol md="3">
+                                <CLabel htmlFor="sujet-input">Sujet</CLabel>
+                              </CCol>
+                              <CCol xs="12" md="9">
+                                <input
+                                  className="col-md-12"
+                                  type="text"
+                                  placeholder="Veuillez saisir le sujet de la reclamation"
+                                  {...register("sujet")}
+                                />
+                                {formState.errors.sujet &&
+                                  errorMessage(
+                                    formState.errors.password.message
+                                  )}
+                              </CCol>
+                            </CFormGroup>
+                            <CFormGroup row>
+                              <CCol md="3">
+                                <CLabel htmlFor="message-input">Message</CLabel>
+                              </CCol>
+                              <CCol xs="12" md="9">
+                                <textarea
+                                  id="message"
+                                  name="message"
+                                  rows="4"
+                                  cols="50"
+                                  {...register('message')}
+                                ></textarea>
+                                {formState.errors.message &&
+                                  formState.errors.message.type ===
+                                    "required" &&
+                                  errorMessage("le message est obligatoire")}
+                              </CCol>
+                            </CFormGroup>
+                          </CCard>
+                        </CCardBody>
+                      </CCard>
                     </CCol>
-                    <CCol xs="12" md="9">
-                      <input
-                        className="col-md-12"
-                        type="text"
-                        placeholder="Veuillez saisir le nom"
-                        {...register("nom")}
-                      />
-                      {formState.errors.nom &&
-                        errorMessage(formState.errors.nom.message)}
-                    </CCol>
-                  </CFormGroup>
-                  <CFormGroup row>
-                    <CCol md="3">
-                      <CLabel htmlFor="prenom-input">Prenom</CLabel>
-                    </CCol>
-                    <CCol xs="12" md="9">
-                      <input
-                        className="col-md-12"
-                        type="text"
-                        placeholder="Veuillez saisir le prenom"
-                        {...register("prenom")}
-                      />
-                      {formState.errors.prenom &&
-                        errorMessage(formState.errors.prenom.message)}
-                    </CCol>
-                  </CFormGroup>
-                  <CFormGroup row>
-                    <CCol md="3">
-                      <CLabel htmlFor="email-input">Adresse email</CLabel>
-                    </CCol>
-                    <CCol xs="12" md="9">
-                      <input
-                        className="col-md-12"
-                        type="text"
-                        placeholder="Veuillez saisir l'email"
-                        {...register("email")}
-                      />
-                      {formState.errors.email &&
-                        errorMessage(formState.errors.email.message)}
-                    </CCol>
-                  </CFormGroup>
-                  <CFormGroup row>
-                    <CCol md="3">
-                      <CLabel htmlFor="sujet-input">Sujet</CLabel>
-                    </CCol>
-                    <CCol xs="12" md="9">
-                      <input
-                        className="col-md-12"
-                        type="text"
-                        placeholder="Veuillez saisir le sujet de la reclamation"
-                        {...register("sujet")}
-                      />
-                      {formState.errors.password &&
-                        errorMessage(formState.errors.password.message)}
-                    </CCol>
-                  </CFormGroup>
-                  <CFormGroup row>
-                    <CCol md="3">
-                      <CLabel htmlFor="message-input">Message</CLabel>
-                    </CCol>
-                    <CCol xs="12" md="9">
-                      <input
-                        className="col-md-12"
-                        type="text"
-                        placeholder="Veuillez saisir le message"
-                        {...register("message")}
-                      />
-                      {formState.errors.message &&
-                        formState.errors.message.type === "required" &&
-                        errorMessage("le message est obligatoire")}
-                    </CCol>
-                  </CFormGroup>
-                  <CButton type="submit" size="sm" color="primary" >
+                  </CRow>{" "}
+                  <CButton className ="Boutton" type="reset" size="sm" color="danger">
+                    <CIcon name="cil-ban" /> Vider les champs
+                  </CButton>
+                  <CButton className ="Boutton" type="submit" size="sm" color="primary">
                     <CIcon name="cil-scrubber" /> Envoyer
                   </CButton>
-                  <CButton type="reset" size="sm" color="danger">
-                    <CIcon name="cil-ban" /> Annuler
-                  </CButton>
+
                 </CForm>
               </CTabPane>
             </CTabContent>
