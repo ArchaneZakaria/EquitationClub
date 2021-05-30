@@ -89,13 +89,13 @@ const ModalCollapse = (props) => {
   const [showCard, setShowCard] = React.useState(true);
 
   return (
-    <CCard>
+    <CRow>
       <CCol xs="12" sm="6" md="4">
         <br></br>
         <CFade in={showCard}>
           <CCard>
             <CCardHeader>
-              {props.item.nom}
+              {props.item.nom} {props.item.prenom}
               <div className="card-header-actions">
                 <CLink
                   className="card-header-action"
@@ -119,19 +119,12 @@ const ModalCollapse = (props) => {
           </CCard>
         </CFade>
       </CCol>
-    </CCard>
+    </CRow>
   );
 };
 const ModalReclamations = (props) => {
   const [collapsed, setCollapsed] = React.useState(false);
-  function handleChange(index) {
-    const { rocket } = index.collapsed;
-    rocket.splice(index, 1);
-    this.setCollapsed({ rocket: [...rocket] }, () => {
-      //call back function of set state
-      console.log(this.collapsed.rocket);
-    });
-  }
+
   const [showCard, setShowCard] = React.useState(true);
   const [accordion, setAccordion] = useState(0);
   const [modal, setModal] = React.useState(props.showing);
@@ -181,9 +174,12 @@ const ModalReclamations = (props) => {
             <CTabContent>
               <CTabPane data-tab="1">
                 <CCard>
-                  {reclamationsData.map((item, index) => (
-                    <ModalCollapse item={item}/>
-                  ))}
+                  <CRow >
+                    {reclamationsData.map((item, index) => (
+                      <CCol lg={4} >
+                      <ModalCollapse item={item} /></CCol>
+                    ))}
+                  </CRow>
                 </CCard>
               </CTabPane>
             </CTabContent>
