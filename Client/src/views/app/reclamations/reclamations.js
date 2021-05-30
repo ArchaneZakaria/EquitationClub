@@ -84,9 +84,54 @@ const ModalInfo = (props) => {
     </React.Fragment>
   );
 };
+const ModalCollapse = (props) => {
+  const [collapsed, setCollapsed] = React.useState(false);
+  const [showCard, setShowCard] = React.useState(true);
 
+  return (
+    <CCard>
+      <CCol xs="12" sm="6" md="4">
+        <br></br>
+        <CFade in={showCard}>
+          <CCard>
+            <CCardHeader>
+              {props.item.nom}
+              <div className="card-header-actions">
+                <CLink
+                  className="card-header-action"
+                  onClick={() => {
+                    setCollapsed(!collapsed);
+                  }}
+                >
+                  <CIcon name={1 ? "cil-chevron-bottom" : "cil-chevron-top"} />
+                </CLink>
+                <CLink
+                  className="card-header-action"
+                  onClick={() => setShowCard(false)}
+                >
+                  <CIcon name="cil-x-circle" />
+                </CLink>
+              </div>
+            </CCardHeader>
+            <CCollapse show={collapsed}>
+              <CCardBody>{props.item.message}</CCardBody>
+            </CCollapse>
+          </CCard>
+        </CFade>
+      </CCol>
+    </CCard>
+  );
+};
 const ModalReclamations = (props) => {
-  const [collapsed, setCollapsed] = React.useState(true);
+  const [collapsed, setCollapsed] = React.useState(false);
+  function handleChange(index) {
+    const { rocket } = index.collapsed;
+    rocket.splice(index, 1);
+    this.setCollapsed({ rocket: [...rocket] }, () => {
+      //call back function of set state
+      console.log(this.collapsed.rocket);
+    });
+  }
   const [showCard, setShowCard] = React.useState(true);
   const [accordion, setAccordion] = useState(0);
   const [modal, setModal] = React.useState(props.showing);
@@ -116,6 +161,7 @@ const ModalReclamations = (props) => {
   const onSubmit = (data) => {
     alert(JSON.stringify(data));
   };
+
   return (
     <React.Fragment>
       <CCard show={modal} onClose={setModal} size="lg">
@@ -135,46 +181,9 @@ const ModalReclamations = (props) => {
             <CTabContent>
               <CTabPane data-tab="1">
                 <CCard>
-                  {/*--------------------------------------------------------------------------------- */}
-                  {reclamationsData.map(
-                    (item) => (
-                      <CCol xs="12" sm="6" md="4">
-                      <br></br>
-                      <CFade in={showCard}>
-                        <CCard className="col-md-12">
-                          <CCardHeader>
-                            {item.nom} 
-                            <div className="card-header-actions">
-                              <CLink
-                                className="card-header-action"
-                                onClick={() => setCollapsed(!collapsed)}
-                              >
-                                <CIcon
-                                  name={
-                                    collapsed
-                                      ? "cil-chevron-bottom"
-                                      : "cil-chevron-top"
-                                  }
-                                />
-                              </CLink>
-                              <CLink
-                                className="card-header-action"
-                                onClick={() => setShowCard(false)}
-                              >
-                                <CIcon name="cil-x-circle" />
-                              </CLink>
-                            </div>
-                          </CCardHeader>
-                          <CCollapse show={collapsed}>
-                            <CCardBody>
-                              {item.message}
-                            </CCardBody>
-                          </CCollapse>
-                        </CCard>
-                      </CFade>
-                    </CCol>
+                  {reclamationsData.map((item, index) => (
+                    <ModalCollapse item={item}/>
                   ))}
-            
                 </CCard>
               </CTabPane>
             </CTabContent>
@@ -188,7 +197,6 @@ const ModalReclamations = (props) => {
                   onSubmit={handleSubmit(onSubmit)}
                 >
                   {" "}
-          
                   <CRow>
                     <CCol xl="12">
                       <CCard>
