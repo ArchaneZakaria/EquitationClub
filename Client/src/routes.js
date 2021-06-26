@@ -49,6 +49,7 @@ const Chevaux = React.lazy(() => import('./views/app/chevaux/Chevaux'));
 const Seance = React.lazy(() => import('./views/app/seance/Seance'));
 const Facturations = React.lazy(() => import('./views/app/Facturations/Facturations'));
 const Reclamations = React.lazy(() => import('./views/app/reclamations/reclamations'));
+const Tache = React.lazy(() => import('./views/app/tache/Tache'));
 
 
 
@@ -103,7 +104,8 @@ const routes = [
   { path: '/app/chevaux', name: 'Liste des chevaux', component: Chevaux },
   { path: '/app/seance', name: 'Liste des séances', component: Seance  },
   { path: '/app/facturations', name: 'Liste des facturations', component: Facturations},
-  { path: '/app/reclamations', name: 'Liste des reclamations', component: Reclamations}
+  { path: '/app/reclamations', name: 'Liste des reclamations', component: Reclamations},
+  { path: '/app/tache', name: 'Liste des taches', component: Tache  }
 ];
 
 export default routes;

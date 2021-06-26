@@ -369,22 +369,46 @@ const Data = [
     RecurrenceRule: "FREQ=WEEKLY;BYDAY=WE;INTERVAL=1;UNTIL=20210626T140000Z",
     RecurrenceException: null,
     RecurrenceID: null,
-  },
-  {
+  },{
     Id: 8,
     Titre: "testBid",
     Location: "salé",
-    StartTime: "2021-05-06T15:00:00.000Z",
-    EndTime: "2021-05-06T16:00:00.000Z",
+    StartTime: "2021-05-05T15:00:00.000Z",
+    EndTime: "2021-05-05T16:00:00.000Z",
     IsAllDay: false,
     Clients: 1,
     RecurrenceRule: "FREQ=WEEKLY;BYDAY=WE;INTERVAL=1;UNTIL=20210626T130000Z",
     RecurrenceException: null,
     RecurrenceID: 7,
     Description: "fuck to all",
-    Guid: "8950ef99-f0f9-9c57-587a-3880266887aa",
-  },
+    
+  },{
+    Id: 9,
+    Titre: "Séance officielle",
+    Location: "Sla",
+    StartTime: "2021-05-28T12:00:00.000Z",
+    EndTime: "2021-05-28T15:00:00.000Z",
+    IsAllDay: false,
+    Clients: 4,
+    RecurrenceRule: "FREQ=WEEKLY;BYDAY=FR;INTERVAL=1;UNTIL=20210627T140000Z",
+    RecurrenceException: "20210528T110000Z",
+    Description: "rien d'interessant", 
+  },{
+    Id: 10,
+    Titre: "Séance officielle",
+    Location: "Sla",
+    StartTime: "2021-05-29T12:00:00.000Z",
+    EndTime: "2021-05-29T17:00:00.000Z",
+    IsAllDay: false,
+    Clients: 4,
+    RecurrenceRule: "FREQ=WEEKLY;BYDAY=FR;INTERVAL=1;UNTIL=20210627T140000Z",
+    RecurrenceException: "20210528T110000Z",
+    RecurrenceID: 9,
+    Description: "rien d'interessant",
+  }
 ];
+
+
 //// Les récurrences :  https://www.telerik.com/kendo-react-ui/components/scheduler/recurring/
 
 //Le composant principal
@@ -539,10 +563,14 @@ class Seance extends React.Component {
       let data;
       if (args.requestType === "eventCreate") {
         data = args.data[0];
-        alert(JSON.stringify(args.data));
+        {
+            /* alert(JSON.stringify(args.data));*/
+      }
       } else if (args.requestType === "eventChange") {
         data = args.data;
-        alert(JSON.stringify(args.data));
+        {
+        /*alert(JSON.stringify(args.data));*/
+      }
       }
       {
         /*if (!this.scheduleObj.isSlotAvailable(data)) {
@@ -550,6 +578,10 @@ class Seance extends React.Component {
             }*/
       }
     }
+  }
+
+  onActionComplete(args) {
+    alert(JSON.stringify(args.data));
   }
   onPopupOpen(args) {
     if (args.type === "Editor") {
@@ -616,6 +648,7 @@ class Seance extends React.Component {
                 }}
                 eventClick={this.onEventClick.bind(this)}
                 actionBegin={this.onActionBegin.bind(this)}
+                actionComplete={this.onActionComplete.bind(this)}
                 sameDayAlert={false}
                 firstDayOfWeek={1}
                 startHour={"08:00"}
