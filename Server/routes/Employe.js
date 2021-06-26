@@ -4,6 +4,8 @@ const { sequelize } = require("../models");
 const router = express.Router();
 const Employe = require("../models/Employe");
 const Utilisateur = require("../models/Utilisateur");
+const bcrypt=require("bcrypt");
+
 
 //L'api de selection de tous les employés
 router.get("/", async (req, res) => {
@@ -22,7 +24,9 @@ router.get("/", async (req, res) => {
 //l'api d'insertion d'un nouveau employé
 
 router.post("/creerEmploye", async (req, res) => {
+  
   try {
+    const hash=await bcrypt.hash(req.body.passwordUtilisateur,5);
     const user = await sequelize.query(
       "INSERT INTO `equitationdb`.`utilisateur` (`nomUtilisateur`, `prenomUtilisateur`, `emailUtilisateur`, `passwordUtilisateur`, `telephoneUtilisateur`, `adresseUtilisateur`, `deletedUtilisateur`) VALUES (:nomUtilisateur, :prenomUtilisateur, :emailUtilisateur, :passwordUtilisateur, :telephoneUtilisateur, :adresseUtilisateur, :deletedUtilisateur);",
       {
@@ -30,7 +34,7 @@ router.post("/creerEmploye", async (req, res) => {
           nomUtilisateur: req.body.nomUtilisateur,
           prenomUtilisateur: req.body.prenomUtilisateur,
           emailUtilisateur: req.body.emailUtilisateur,
-          passwordUtilisateur: req.body.passwordUtilisateur,
+          passwordUtilisateur: hash,
           telephoneUtilisateur: req.body.telephoneUtilisateur,
           adresseUtilisateur: req.body.adresseUtilisateur,
           deletedUtilisateur: 0,

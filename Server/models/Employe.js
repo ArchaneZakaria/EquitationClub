@@ -65,5 +65,5 @@ const Employe = sequelize.define("Employe", {
   Employe.hasOne(Utilisateur, {
     foreignKey: 'idUtilisateur'
   });
-  Utilisateur.belongsTo(Employe)
+  Employe.belongsTo(Utilisateur)
   module.exports = Employe;

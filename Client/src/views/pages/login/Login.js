@@ -12,11 +12,45 @@ import {
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
-  CRow
+  CRow,
+  CFormText
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
-const Login = () => {
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import axios from 'axios';
+import { reset } from 'enzyme/build/configuration';
+
+
+
+
+const Login = (props) => {
+  const schema = yup.object().shape({
+    emailUtilisateur:yup.string().trim().email("Email invalide !").required("Veuillez saisir votre email !"),
+    passwordUtilisateur:yup.string().trim().max(15).required("Veuillez saisir le mot de passe !").min(4, "Le mot de passe doit contenir au moins 4 caractéres")
+  })
+
+  const errorMessage = (error) => {
+    return <CFormText color="danger">{error}</CFormText>;
+  };
+  const { register, handleSubmit, errors, formState, setValue } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = (data) => {
+
+    axios.post("http://localhost:3001/Utilisateur/login",data).then((response)=>{
+      if(response.status==200){
+        
+        props.login(true);
+      }else{
+        props.login(false);
+      }
+    })
+      };
+
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
       <CContainer>
@@ -25,28 +59,41 @@ const Login = () => {
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
-                  <CForm>
+                  <CForm
+                   action="#"
+                   method="post"
+                   encType="multipart/form-data"
+                   className="form-horizontal"
+                   onSubmit={handleSubmit(onSubmit)}
+                  >
                     <h1>Se connecter</h1>
                     <p className="text-muted">Connectez-vous à votre compte</p>
+                    {formState.errors.emailUtilisateur &&
+                  errorMessage(formState.errors.emailUtilisateur.message)}
                     <CInputGroup className="mb-3">
+                    
                       <CInputGroupPrepend>
                         <CInputGroupText>
                           <CIcon name="cil-user" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="text" placeholder="Email" autoComplete="username" />
+                      <CInput type="text" placeholder="Email" autoComplete="username" {...register("emailUtilisateur")}/>
+                      
                     </CInputGroup>
+                    
+                    {formState.errors.passwordUtilisateur &&
+                  errorMessage(formState.errors.passwordUtilisateur.message)}
                     <CInputGroup className="mb-4">
                       <CInputGroupPrepend>
                         <CInputGroupText>
                           <CIcon name="cil-lock-locked" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="password" placeholder="Mot de passe" autoComplete="current-password" />
+                      <CInput type="password" placeholder="Mot de passe" autoComplete="current-password" {...register("passwordUtilisateur")} />
                     </CInputGroup>
                     <CRow>
                       <CCol xs="6">
-                        <CButton color="primary" className="px-4">Se connecter</CButton>
+                        <CButton color="primary" type="submit" className="px-4" >Se connecter</CButton>
                       </CCol>
                       <CCol xs="6" className="text-right">
                         <CButton color="link" className="px-0">Mot de passe oublié?</CButton>
