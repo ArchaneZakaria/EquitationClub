@@ -782,9 +782,12 @@ const ModalNewPersonnel = (props) => {
   };
 
   const onSubmit = (data) => {
-    alert(JSON.stringify(data));
+    //alert(JSON.stringify(data));
     axios
-      .post("http://localhost:3001/Employe/creerEmploye", data)
+      .post("http://localhost:3001/Employe/creerEmploye", data,{headers:
+      {
+        accessToken:localStorage.getItem("accessToken")
+      }})
       .then((response) => {
         if (response.status == 200) {
           setLarge(!large);
@@ -1062,7 +1065,10 @@ const Personnels = () => {
 
   const misaJour = () => {
     //alert('mis a jour');
-    axios.get("http://localhost:3001/Employe").then((response) => {
+    axios.get("http://localhost:3001/Employe",{headers:
+    {
+      accessToken:localStorage.getItem("accessToken")
+    }}).then((response) => {
       //alert(JSON.stringify(response.data));
       setData(response.data);
     });

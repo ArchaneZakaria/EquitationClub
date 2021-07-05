@@ -3,18 +3,12 @@ import CIcon from '@coreui/icons-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle,faHorseHead } from '@fortawesome/free-solid-svg-icons'
 
+import { useContext } from 'react'
+import { AuthContext } from 'src/helpers/AuthContext'
+
 
 const _nav =  [
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Dashboard',
-    to: '/dashboard',
-    icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon"/>,
-   /* badge: {
-      color: 'info',
-      text: 'NEW',
-    }*/
-  },
+  
   ////////////////////////////////
   {
     _tag: 'CSidebarNavTitle',
@@ -45,7 +39,7 @@ const _nav =  [
     icon: 'cil-people',
   },{
     _tag: 'CSidebarNavItem',
-    name: 'Paiements',
+    name: 'Facturations',
     to: '/App/Facturations',
     icon: 'cil-credit-card',
   },{
@@ -56,12 +50,15 @@ const _nav =  [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Réclamations',
+    name: 'Support',
     to: '/App/Reclamations',
     icon: 'cil-comment-square',
   },
   ////////////////////////////////
-  {
+  
+]
+/*
+{
     _tag: 'CSidebarNavTitle',
     _children: ['Theme']
   },
@@ -376,6 +373,5 @@ const _nav =  [
     _tag: 'CSidebarNavDivider',
     className: 'm-2'
   }
-]
-
+*/
 export default _nav

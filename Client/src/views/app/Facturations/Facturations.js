@@ -214,7 +214,7 @@ const ModalHistorique = (props) => {
     <React.Fragment>
       <CCard show={modal} onClose={setModal} size="lg">
         <CCardHeader closeButton>
-          <CCardTitle>Paiements</CCardTitle>
+          <CCardTitle>Facturations</CCardTitle>
         </CCardHeader>
         <CCardBody>
           <CTabs activeTab="1">

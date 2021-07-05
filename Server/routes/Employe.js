@@ -5,10 +5,12 @@ const router = express.Router();
 const Employe = require("../models/Employe");
 const Utilisateur = require("../models/Utilisateur");
 const bcrypt=require("bcrypt");
+const {validateToken}=require('../middlewares/AuthMiddleware')
 
 
 //L'api de selection de tous les employés
-router.get("/", async (req, res) => {
+router.get("/", validateToken, async (req, res) => {
+  const username=req.user.id;
   try {
     //const employess=await Employe.findAll({ include: Utilisateur })
     const Employes = await sequelize.query(
@@ -23,12 +25,17 @@ router.get("/", async (req, res) => {
 
 //l'api d'insertion d'un nouveau employé
 
-router.post("/creerEmploye", async (req, res) => {
-  
+router.post("/creerEmploye", validateToken,async (req, res) => {
+  const username=req.user.user.idUtilisateur;
+  console.log(req.user.user);
   try {
+    let rolex=2;
+    if(req.body.admin){
+      rolex=3;
+    }
     const hash=await bcrypt.hash(req.body.passwordUtilisateur,5);
     const user = await sequelize.query(
-      "INSERT INTO `equitationdb`.`utilisateur` (`nomUtilisateur`, `prenomUtilisateur`, `emailUtilisateur`, `passwordUtilisateur`, `telephoneUtilisateur`, `adresseUtilisateur`, `deletedUtilisateur`) VALUES (:nomUtilisateur, :prenomUtilisateur, :emailUtilisateur, :passwordUtilisateur, :telephoneUtilisateur, :adresseUtilisateur, :deletedUtilisateur);",
+      "INSERT INTO `equitationdb`.`utilisateur` (`nomUtilisateur`, `prenomUtilisateur`, `emailUtilisateur`, `passwordUtilisateur`, `telephoneUtilisateur`, `adresseUtilisateur`, `deletedUtilisateur`, `roleUtilisateur`, `cbyUtilisateur`) VALUES (:nomUtilisateur, :prenomUtilisateur, :emailUtilisateur, :passwordUtilisateur, :telephoneUtilisateur, :adresseUtilisateur, :deletedUtilisateur, :roleUtilisateur, :cbyUtilisateur);",
       {
         replacements: {
           nomUtilisateur: req.body.nomUtilisateur,
@@ -38,6 +45,8 @@ router.post("/creerEmploye", async (req, res) => {
           telephoneUtilisateur: req.body.telephoneUtilisateur,
           adresseUtilisateur: req.body.adresseUtilisateur,
           deletedUtilisateur: 0,
+          roleUtilisateur:rolex,
+          cbyUtilisateur: username
         },
         type: QueryTypes.INSERT,
       }

@@ -84,7 +84,7 @@ const ModalNewSeance = (props) => {
       props.sum(newLine);
       setLarge(false);
     } else {
-      alert("echec");
+      //alert("echec");
     }
     reset();
   };
@@ -371,10 +371,10 @@ const Data = [
     RecurrenceID: null,
   },{
     Id: 8,
-    Titre: "testBid",
-    Location: "salé",
-    StartTime: "2021-05-05T15:00:00.000Z",
-    EndTime: "2021-05-05T16:00:00.000Z",
+    Titre: "Séance au pas",
+    Location: "Circuit 1",
+    StartTime: "2021-07-04T15:00:00.000Z",
+    EndTime: "2021-07-04T16:00:00.000Z",
     IsAllDay: false,
     Clients: 1,
     RecurrenceRule: "FREQ=WEEKLY;BYDAY=WE;INTERVAL=1;UNTIL=20210626T130000Z",
@@ -384,10 +384,10 @@ const Data = [
     
   },{
     Id: 9,
-    Titre: "Séance officielle",
+    Titre: "Séance au pas",
     Location: "Sla",
-    StartTime: "2021-05-28T12:00:00.000Z",
-    EndTime: "2021-05-28T15:00:00.000Z",
+    StartTime: "2021-07-03T12:00:00.000Z",
+    EndTime: "2021-07-03T15:00:00.000Z",
     IsAllDay: false,
     Clients: 4,
     RecurrenceRule: "FREQ=WEEKLY;BYDAY=FR;INTERVAL=1;UNTIL=20210627T140000Z",
@@ -395,10 +395,10 @@ const Data = [
     Description: "rien d'interessant", 
   },{
     Id: 10,
-    Titre: "Séance officielle",
-    Location: "Sla",
-    StartTime: "2021-05-29T12:00:00.000Z",
-    EndTime: "2021-05-29T17:00:00.000Z",
+    Titre: "Séance 1",
+    Location: "Trot",
+    StartTime: "2021-06-29T12:00:00.000Z",
+    EndTime: "2021-06-29T17:00:00.000Z",
     IsAllDay: false,
     Clients: 4,
     RecurrenceRule: "FREQ=WEEKLY;BYDAY=FR;INTERVAL=1;UNTIL=20210627T140000Z",
@@ -552,7 +552,7 @@ class Seance extends React.Component {
   }
   onEventClick(args) {
     let event = this.scheduleObj.getEventDetails(args.element);
-    alert(JSON.stringify(event));
+    //alert(JSON.stringify(event));
   }
 
   onActionBegin(args) {
@@ -581,7 +581,7 @@ class Seance extends React.Component {
   }
 
   onActionComplete(args) {
-    alert(JSON.stringify(args.data));
+    //alert(JSON.stringify(args.data));
   }
   onPopupOpen(args) {
     if (args.type === "Editor") {

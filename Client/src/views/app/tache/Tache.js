@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { L10n, setCulture } from "@syncfusion/ej2-base";
+import { AuthContext } from 'src/helpers/AuthContext'
 import {
   Inject,
   ScheduleComponent,
@@ -369,34 +370,36 @@ const Data = [
     RecurrenceID: null,
   },{
     Id: 8,
-    Titre: "testBid",
+    Titre: "Entrainement",
     Location: "salé",
-    StartTime: "2021-05-05T15:00:00.000Z",
-    EndTime: "2021-05-05T16:00:00.000Z",
+    StartTime: "2021-07-02T09:00:00.000Z",
+    EndTime: "2021-07-02T12:00:00.000Z",
     IsAllDay: false,
-    Employe: 1,
-    RecurrenceRule: "FREQ=WEEKLY;BYDAY=WE;INTERVAL=1;UNTIL=20210626T130000Z",
+    Employe: 2,
+    RecurrenceRule: "FREQ=WEEKLY;BYDAY=WE;INTERVAL=1;UNTIL=20210826T130000Z",
     RecurrenceException: null,
     RecurrenceID: 7,
     Description: "fuck to all",
     
   },{
     Id: 9,
-    Titre: "Séance officielle",
-    Location: "Sla",
-    StartTime: "2021-05-28T12:00:00.000Z",
-    EndTime: "2021-05-28T15:00:00.000Z",
+    Titre: "Entrainement",
+    Location: "salé",
+    StartTime: "2021-06-30T12:00:00.000Z",
+    EndTime: "2021-06-30T15:00:00.000Z",
     IsAllDay: false,
-    Employe: 4,
-    RecurrenceRule: "FREQ=WEEKLY;BYDAY=FR;INTERVAL=1;UNTIL=20210627T140000Z",
-    RecurrenceException: "20210528T110000Z",
-    Description: "rien d'interessant", 
+    Employe: 2,
+    RecurrenceRule: "FREQ=WEEKLY;BYDAY=WE;INTERVAL=1;UNTIL=20210826T130000Z",
+    RecurrenceException: null,
+    RecurrenceID: 7,
+    Description: "fuck to all",
+    
   },{
     Id: 10,
-    Titre: "Séance officielle",
+    Titre: "Elevage",
     Location: "Sla",
-    StartTime: "2021-05-29T12:00:00.000Z",
-    EndTime: "2021-05-29T17:00:00.000Z",
+    StartTime: "2021-06-29T12:00:00.000Z",
+    EndTime: "2021-06-29T17:00:00.000Z",
     IsAllDay: false,
     Employe: 4,
     RecurrenceRule: "FREQ=WEEKLY;BYDAY=FR;INTERVAL=1;UNTIL=20210627T140000Z",
@@ -432,25 +435,25 @@ L10n.load({
       cancel: "Annuler",
       noTitle: "(No Title)",
       delete: "Supprimer",
-      deleteEvent: "Supprimer séance",
+      deleteEvent: "Supprimer tache",
       deleteMultipleEvent: "Delete Multiple Events",
       selectedItems: "Items selected",
       deleteSeries: "Supprimer le forfait",
       edit: "Edit",
       editSeries: "Modifier le forfait",
-      editEvent: "Modifier la séance",
+      editEvent: "Modifier la tache",
       createEvent: "Créer",
       subject: "Sujet",
       addTitle: "Ajouter titre",
       moreDetails: "Plus de détails",
       save: "Enregistrer",
-      editContent: "Voulez vous supprimez tous les séances du forfait ?",
+      editContent: "Voulez vous supprimez tous les taches de cet employé ?",
       deleteRecurrenceContent:
         "Do you want to delete only this event or entire series?",
-      deleteContent: "Vous étes sur de vouloir supprimer cette séance?",
+      deleteContent: "Vous étes sur de vouloir supprimer cette tache?",
       deleteMultipleContent:
         "Are you sure you want to delete the selected events?",
-      newEvent: "Nouvelle séance",
+      newEvent: "Nouvelle tache",
       title: "Titre",
       location: "Lieu",
       description: "Description",
@@ -527,10 +530,16 @@ L10n.load({
 setCulture("en");
 
 class Tache extends React.Component {
+  static contextType=AuthContext;
   constructor() {
     super(...arguments);
     {
       /*const [data,setData]=React.useState(Data)*/
+    }
+    if(this.context.utilisateur.roleUtilisateur==2){
+      this.autorise=true;
+    }else{
+      this.autorise=false;
     }
     this.scheduleObj = React.createRef();
     this.data = Data;
@@ -558,7 +567,7 @@ class Tache extends React.Component {
   }
   onEventClick(args) {
     let event = this.scheduleObj.getEventDetails(args.element);
-    alert(JSON.stringify(event));
+    //alert(JSON.stringify(event));
   }
 
   onActionBegin(args) {
@@ -587,9 +596,10 @@ class Tache extends React.Component {
   }
 
   onActionComplete(args) {
-    alert(JSON.stringify(args.data));
+    //alert(JSON.stringify(args.data));
   }
   onPopupOpen(args) {
+/*
     if (args.type === "Editor") {
       if (!args.element.querySelector(".custom-field-row")) {
         let row = createElement("div", { className: "custom-field-row" });
@@ -622,11 +632,12 @@ class Tache extends React.Component {
         drowDownList.appendTo(inputEle);
         inputEle.setAttribute("name", "EventType");
       }
-    }
+    }*/
   }
 
   onAddClick(row) {
     this.scheduleObj.addEvent(row);
+    alert('dsdsd')
   }
 
   render() {
@@ -634,7 +645,7 @@ class Tache extends React.Component {
       <CRow>
         <CCol>
           <CCard>
-            <CCardHeader>Liste des séances</CCardHeader>
+            <CCardHeader>Liste des taches</CCardHeader>
             <CCardBody>
               {/*<ModalNewSeance showing={this.state.show} sum={this.onAddClick.bind(this)}/>*/}
               <ClientSeance/>
@@ -660,7 +671,7 @@ class Tache extends React.Component {
                 firstDayOfWeek={1}
                 startHour={"08:00"}
                 endHour={"19:00"}
-                readonly={false}
+                readonly={this.autorise}
                 timezone={"FR"}
                 showHeaderBar={true}
                 timeScale={{ interval: 60, slotCount: 1 }}

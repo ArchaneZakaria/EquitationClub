@@ -22,16 +22,21 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from 'axios';
 import { reset } from 'enzyme/build/configuration';
+import { useContext } from 'react';
+import { AuthContext } from 'src/helpers/AuthContext';
 
 
 
 
 const Login = (props) => {
+  const { setIdtilisateur } = useContext(AuthContext)
+
   const schema = yup.object().shape({
     emailUtilisateur:yup.string().trim().email("Email invalide !").required("Veuillez saisir votre email !"),
     passwordUtilisateur:yup.string().trim().max(15).required("Veuillez saisir le mot de passe !").min(4, "Le mot de passe doit contenir au moins 4 caractéres")
   })
 
+  
   const errorMessage = (error) => {
     return <CFormText color="danger">{error}</CFormText>;
   };
@@ -43,10 +48,15 @@ const Login = (props) => {
 
     axios.post("http://localhost:3001/Utilisateur/login",data).then((response)=>{
       if(response.status==200){
-        
+        localStorage.setItem("accessToken",response.data.accessToken)
+        setIdtilisateur(response.data.user);
+       //props.setIdtilisateur(response.data.user)
+        //alert(JSON.stringify(setAuthState));
         props.login(true);
       }else{
+        
         props.login(false);
+        
       }
     })
       };
@@ -96,21 +106,16 @@ const Login = (props) => {
                         <CButton color="primary" type="submit" className="px-4" >Se connecter</CButton>
                       </CCol>
                       <CCol xs="6" className="text-right">
-                        <CButton color="link" className="px-0">Mot de passe oublié?</CButton>
                       </CCol>
                     </CRow>
                   </CForm>
                 </CCardBody>
               </CCard>
-              <CCard className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
+              <CCard className="text-white py-5 d-md-down-none" style={{ width: '44%' ,backgroundColor:"#3aafa9"}}>
                 <CCardBody className="text-center">
                   <div>
-                    <h2>Club d'équitation AZER </h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                      labore et dolore magna aliqua.</p>
-                    <Link to="/register">
-                      <CButton color="primary" className="mt-3" active tabIndex={-1}>Register Now!</CButton>
-                    </Link>
+                    <h2>EquiClub</h2>
+                    <p>Outil de gestion digitale des écuries tout-en-un.</p>
                   </div>
                 </CCardBody>
               </CCard>

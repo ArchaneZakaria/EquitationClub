@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CHeader,
   CToggler,
@@ -9,12 +10,19 @@ import {
   CHeaderNavLink,
   CSubheader,
   CBreadcrumbRouter,
+  CButton,
   CLink
 } from '@coreui/react'
+import {
+    faSignOutAlt
+} from "@fortawesome/free-solid-svg-icons";
 import CIcon from '@coreui/icons-react'
-
+import { useContext } from 'react'
+import { AuthContext } from 'src/helpers/AuthContext'
+import { Redirect } from "react-router-dom";
 // routes config
 import routes from '../routes'
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons'
 
 import { 
   TheHeaderDropdown,
@@ -23,14 +31,22 @@ import {
   TheHeaderDropdownTasks
 }  from './index'
 
-const TheHeader = () => {
+const TheHeader = (props) => {
   const dispatch = useDispatch()
   const sidebarShow = useSelector(state => state.sidebarShow)
-
+  const { utilisateur } = useContext(AuthContext)
   const toggleSidebar = () => {
     const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive'
     dispatch({type: 'set', sidebarShow: val})
   }
+  const { setIdtilisateur  } = useContext(AuthContext)
+  const logout=()=>{
+      localStorage.removeItem("accessToken");
+      props.login(false)
+      
+      return <Redirect to='/login'></Redirect>
+  }
+
 
   const toggleSidebarMobile = () => {
     const val = [false, 'responsive'].includes(sidebarShow) ? true : 'responsive'
@@ -55,7 +71,7 @@ const TheHeader = () => {
 
       <CHeaderNav className="d-md-down-none mr-auto" >
         <CHeaderNavItem className="px-3" >
-          <CHeaderNavLink to="/dashboard">Dashboard</CHeaderNavLink>
+          <CHeaderNavLink to="/dashboard">Dashboard </CHeaderNavLink>
         </CHeaderNavItem>
         <CHeaderNavItem  className="px-3">
           <CHeaderNavLink to="/users">Séances</CHeaderNavLink>
@@ -66,10 +82,21 @@ const TheHeader = () => {
       </CHeaderNav>
 
       <CHeaderNav className="px-3">
-        <TheHeaderDropdownNotif/>
-        <TheHeaderDropdownTasks/>
-        <TheHeaderDropdownMssg/>
+      <FontAwesomeIcon icon={faUserCircle} style={{marginRight:"10px",marginLeft:"7px"}}/> {utilisateur.nomUtilisateur} {utilisateur.prenomUtilisateur}
       {/*  <TheHeaderDropdown/> */}
+      &nbsp;
+      <CButton
+        size="sm"
+        shape="pill"
+        color="secondary"
+        className=""
+        style={{ position: "relative", float: "left" }}
+        title="Déconnexion"
+        onClick={logout}
+            >
+              
+        <FontAwesomeIcon size="sm" icon={faSignOutAlt} />
+      </CButton>
       </CHeaderNav>
 
       <CSubheader  className="px-3 justify-content-between" style={{backgroundColor:"#def2f1"}}>
@@ -78,19 +105,7 @@ const TheHeader = () => {
           routes={routes} 
         />
           <div className="d-md-down-none mfe-2 c-subheader-nav">
-            <CLink className="c-subheader-nav-link"href="#">
-              <CIcon name="cil-speech" alt="Settings" />
-            </CLink>
-            <CLink 
-              className="c-subheader-nav-link" 
-              aria-current="page" 
-              to="/dashboard"
-            >
-              <CIcon name="cil-graph" alt="Dashboard" />&nbsp;Dashboard
-            </CLink>
-            <CLink className="c-subheader-nav-link" href="#">
-              <CIcon name="cil-settings" alt="Settings" />&nbsp;Paramétres
-            </CLink>
+          
           </div>
       </CSubheader>
     </CHeader>

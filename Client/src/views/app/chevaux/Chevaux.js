@@ -31,22 +31,15 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import CIcon from "@coreui/icons-react";
-import { DocsLink } from "src/reusable";
-import historyData from "../personnels/HistoryData";
 import detailsHistory from "../personnels/detailsHistory";
 import chevauxData from "../chevaux/ChevauxData";
 import clientData from "../clients/ClientData";
 import historyCheval from "../chevaux/historyCheval";
-import ReactDOM from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHistory,
-  faEllipsisH,
   faEdit,
-  faInfoCircle,
   faTrashAlt,
-  faChevronUp,
-  faChevronDown,
   faCamera,
 } from "@fortawesome/free-solid-svg-icons";
 

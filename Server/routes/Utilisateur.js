@@ -2,7 +2,9 @@ const express=require('express');
 const  router=express.Router();
 const Utilisateur=require("../models/Utilisateur");
 const bcrypt=require("bcrypt");
-const e = require('express');
+const {sign}=require('jsonwebtoken')
+const {validateToken}=require('../middlewares/AuthMiddleware')
+
 
 router.get("/",async (req,res)=>{
 	try {
@@ -37,7 +39,8 @@ router.post("/login", async (req,res)=>{
     if(user){
 		const validPassword=await bcrypt.compare(body.passwordUtilisateur,user.passwordUtilisateur);
 		if(validPassword){
-			res.status(200).json({message:"Connexion réussi"});
+			const accessToken=sign({user},"important");
+			res.json({accessToken:accessToken,user:user});
 		}else{
 			res.status(400).json({error:"Connexion echoué"})
 		}
@@ -46,4 +49,8 @@ router.post("/login", async (req,res)=>{
 	}
 })
 
+
+router.get("/auth",validateToken,(req,res)=>{
+	res.json(req.user)
+})
 module.exports=router;
